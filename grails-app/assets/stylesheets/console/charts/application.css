@@ -1,0 +1,176 @@
+/*
+*= require_self
+*/
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", Verdana, sans-serif;
+    background: #eee;
+    overflow: hidden;
+}
+
+#root, #main-content, #main-content > div {
+    height: 100%;
+}
+
+#header .navbar {
+    border-bottom: 1px solid #ccc;
+}
+
+.navbar {
+    height: 51px;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.navbar .navbar-brand {
+    background: transparent url("img/grails.logo.png") no-repeat;
+    background-position: 5px center;
+    padding-left: 48px;
+    font-size: 18px;
+}
+
+.navbar .title {
+    border-left: 1px dotted;
+    padding-left: 10px;
+    margin-left: 0px;
+}
+
+.navbar .saving {
+    margin-left: 7px;
+}
+
+.modal-open .navbar-fixed-top {
+    margin-right: 0px;
+}
+
+.CodeMirror {
+    height: 100%;
+    font-size: 14px;
+}
+
+#code-wrapper {
+    overflow: auto;
+}
+
+.dropdown-menu.settings a i.fa-check {
+    visibility: hidden;
+}
+
+.dropdown-menu.settings a.selected i.fa-check {
+    visibility: visible;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.btn-toolbar {
+    border-bottom: 1px solid #444;
+}
+
+.btn-toolbar .btn {
+    float: left;
+    border: 0;
+    border-radius: 0;
+}
+
+.btn-toolbar .btn.btn-sm {
+    padding: 5px 10px;
+    line-height: 1.5;
+    border-radius: 0;
+    height: 28px;
+}
+
+.btn-toolbar .btn:hover,
+.btn-toolbar .btn:focus {
+    outline: none;
+}
+
+.modal-dialog .modal-content {
+    border-width: 4px;
+}
+
+.modal-dialog .modal-footer {
+    padding: 10px;
+}
+
+body[data-theme="default"] .navbar {
+    background-color: #e9e9e7;
+}
+
+body[data-theme="default"] .navbar .navbar-brand {
+    color: #555;
+}
+
+body[data-theme="default"] .navbar .title {
+    color: #666;
+}
+
+body[data-theme="default"] .btn-toolbar {
+    border-color: #ccc;
+    background-color: #e9e9e7;
+}
+
+body[data-theme="default"] .btn-toolbar .btn {
+    background-color: #e9e9e7;
+    border-color: #e9e9e7;
+    color: #333;
+}
+
+body[data-theme="default"] .btn-toolbar .btn .caret {
+    border-top-color: #333;
+}
+
+body[data-theme="default"] .btn-toolbar .btn:hover,
+body[data-theme="default"] .btn-toolbar .btn:focus {
+    color: #333;
+    background-color: #ccc;
+    border-color: #040404;
+}
+
+body[data-theme="default"] .modal-dialog .modal-content {
+    background-color: #e9e9e7;
+}
+
+body[data-theme="default"] .modal-dialog .modal-header {
+    border-bottom-color: #ccc;
+}
+
+body[data-theme="default"] .modal-dialog .modal-footer {
+    border-top-color: #ccc;
+}
+
+.gwt-SplitLayoutPanel-HDragger,
+.gwt-SplitLayoutPanel-VDragger {
+    cursor: col-resize;
+    background: rgb(221, 221, 221);
+}
+
+.gwt-SplitLayoutPanel-VDragger {
+    cursor: row-resize;
+}
+
+.gwt-SplitLayoutPanel-HDragger:hover,
+.gwt-SplitLayoutPanel-VDragger:hover {
+    background: #C4E1A4;
+}
+
+#result {
+    height: 100%;
+    position: relative;
+    background: white;
+}
+
+#loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -0.666666665em;
+    margin-left: -0.666666665em;
+    color: black;
+}

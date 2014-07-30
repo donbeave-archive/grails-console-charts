@@ -1,0 +1,70 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
+    <b:Modal closable="true" fade="true" keyboard="true" b:id="connectorModal">
+        <b:ModalHeader title="Setup New Connection"/>
+        <b:ModalBody>
+            <b:Form type="HORIZONTAL">
+                <b:FieldSet>
+                    <b:FormGroup>
+                        <b:FormLabel for="mysql_hostname" addStyleNames="col-lg-2">Hostname</b:FormLabel>
+                        <b:Column size="LG_7">
+                            <b:TextBox b:id="mysql_hostname" ui:field="mysqlHostname"/>
+                        </b:Column>
+                        <b:FormLabel for="mysql_port" addStyleNames="col-lg-1">Port</b:FormLabel>
+                        <b:Column size="LG_2">
+                            <b:IntegerBox b:id="mysql_port" ui:field="mysqlPort"/>
+                        </b:Column>
+                    </b:FormGroup>
+                    <b:FormGroup>
+                        <b:FormLabel for="mysql_username" addStyleNames="col-lg-2">Username</b:FormLabel>
+                        <b:Column size="LG_10">
+                            <b:TextBox b:id="mysql_username" ui:field="mysqlUsername"/>
+                        </b:Column>
+                    </b:FormGroup>
+                    <b:FormGroup>
+                        <b:FormLabel for="mysql_password" addStyleNames="col-lg-2">Password</b:FormLabel>
+                        <b:Column size="LG_10">
+                            <b:PasswordTextBox b:id="mysql_password" ui:field="mysqlPassword"/>
+                        </b:Column>
+                    </b:FormGroup>
+                    <b:FormGroup>
+                        <b:Column size="LG_10" push="LG_2">
+                            <b:InlineCheckBox text="SSH" b:id="ssh_on" ui:field="sshToggle"/>
+                        </b:Column>
+                    </b:FormGroup>
+                </b:FieldSet>
+                <b:Collapse toggle="false" ui:field="sshCollapse">
+                    <b:FieldSet>
+                        <b:FormGroup>
+                            <b:FormLabel for="ssh_hostname" addStyleNames="col-lg-2">SSH Hostname</b:FormLabel>
+                            <b:Column size="LG_7">
+                                <b:TextBox b:id="ssh_hostname" ui:field="sshHostname"/>
+                            </b:Column>
+                            <b:FormLabel for="ssh_port" addStyleNames="col-lg-1">Port</b:FormLabel>
+                            <b:Column size="LG_2">
+                                <b:IntegerBox b:id="ssh_port" ui:field="sshPort"/>
+                            </b:Column>
+                        </b:FormGroup>
+                        <b:FormGroup>
+                            <b:FormLabel for="ssh_username" addStyleNames="col-lg-2">SSH Username</b:FormLabel>
+                            <b:Column size="LG_10">
+                                <b:TextBox b:id="ssh_username" ui:field="sshUsername"/>
+                            </b:Column>
+                        </b:FormGroup>
+                        <b:FormGroup>
+                            <b:FormLabel for="ssh_password" addStyleNames="col-lg-2">SSH Password</b:FormLabel>
+                            <b:Column size="LG_10">
+                                <b:PasswordTextBox b:id="ssh_password" ui:field="sshPassword"/>
+                            </b:Column>
+                        </b:FormGroup>
+                    </b:FieldSet>
+                </b:Collapse>
+            </b:Form>
+        </b:ModalBody>
+        <b:ModalFooter>
+            <b:Button type="DANGER" ui:field="cancelButton">Cancel</b:Button>
+            <b:Button type="SUCCESS" ui:field="sendButton">Ok</b:Button>
+        </b:ModalFooter>
+    </b:Modal>
+</ui:UiBinder>
