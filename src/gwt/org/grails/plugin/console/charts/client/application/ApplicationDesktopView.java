@@ -15,8 +15,8 @@
  */
 package org.grails.plugin.console.charts.client.application;
 
-import com.dianaui.universal.core.client.ui.Anchor;
 import com.dianaui.universal.core.client.ui.AnchorListItem;
+import com.dianaui.universal.core.client.ui.FontAwesomeIcon;
 import com.dianaui.universal.core.client.ui.constants.IconSize;
 import com.dianaui.universal.core.client.ui.constants.IconType;
 import com.dianaui.universal.core.client.ui.html.Div;
@@ -25,6 +25,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -86,11 +87,11 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     public void loading() {
         clear();
 
-        Anchor loading = new Anchor();
+        FontAwesomeIcon loading = new FontAwesomeIcon();
         loading.getElement().setId("loading");
-        loading.setFontAwesomeIcon(IconType.REFRESH);
-        loading.setIconSize(IconSize.LARGE);
-        loading.setIconSpin(true);
+        loading.setType(IconType.REFRESH);
+        loading.setSize(IconSize.LARGE);
+        loading.setSpin(true);
 
         rightContainer.add(loading);
     }
@@ -109,12 +110,53 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         Document.get().getElementById(CHART_ID).removeAllChildren();
 
-        ScriptElement script = Document.get().createScriptElement(
-                "var data = google.visualization.arrayToDataTable(" + result.get("content").toString() + ");" +
-                        "var chart = new google.visualization." + type + "Chart(document.getElementById('chart'));" +
-                        "chart.draw(data);"
+        JSONArray columns = result.get("columns").isArray();
 
-        );
+        String axes = "{\n" +
+                "\"id\": \"v1\",\n" +
+                "\"axisThickness\": 2,\n" +
+                "\"gridAlpha\": 0,\n" +
+                "\"axisAlpha\": 1,\n" +
+                "\"position\": \"left\"\n" +
+                "}";
+
+        String graphs = "";
+
+        for (int i = 1; columns.size() > i; i++) {
+            graphs += (graphs.equals("") ? "" : ",") + "{\n" +
+                    "\"bullet\": \"round\",\n" +
+                    "\"valueField\": " + columns.get(i).toString() + ",\n" +
+                    "\"valueAxis\": \"v" + i + "\",\n" +
+                    "\"bullet\": \"round\",\n" +
+                    "\"bulletBorderThickness\": 1,\n" +
+                    "\"hideBulletsCount\": 30,\n" +
+                    "\"title\": " + columns.get(i).toString() + ",\n" +
+                    "\"fillAlphas\": 0\n" +
+                    "}";
+        }
+
+        String content = "AmCharts.makeChart(\"" + CHART_ID + "\", {" +
+                "\"type\": \"serial\",\n" +
+                "\"theme\": \"none\",\n" +
+                "\"pathToImages\": \"http://www.amcharts.com/lib/3/images/\",\n" +
+                "\"legend\": {\n" +
+                "  \"useGraphSettings\": true\n" +
+                "},\n" +
+                "\"dataDateFormat\": \"YYYY-MM-DD HH:NN\",\n" +
+                "\"dataProvider\": " + result.get("content").toString() + ",\n" +
+                "\"valueAxes\": [" + axes + "],\n" +
+                "\"graphs\": [" + graphs + "],\n" +
+                "\"chartScrollbar\": {},\n" +
+                "\"chartCursor\": {},\n" +
+                "\"categoryField\": " + columns.get(0) + ",\n" +
+                "\"categoryAxis\": {\n" +
+                "\"parseDates\": true,\n" +
+                "\"axisColor\": \"#DADADA\",\n" +
+                "\"minorGridEnabled\": true\n" +
+                "}\n" +
+                "});";
+
+        ScriptElement script = Document.get().createScriptElement(content);
         script.setId(CHART_INIT_ID);
 
         rightContainer.getElement().appendChild(script);

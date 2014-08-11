@@ -10,9 +10,11 @@
 
     <script src="${resource(dir: 'gwt/GrailsChartsConsole', file: 'GrailsChartsConsole.nocache.js', plugin: 'console-charts')}?${new Date().time}"></script>
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="http://www.amcharts.com/lib/3/serial.js"></script>
+    <script type="text/javascript" src="http://www.amcharts.com/lib/3/themes/none.js"></script>
+
     <script type="text/javascript">
-        google.load("visualization", "1", {packages: ["corechart"]});
         var console_charts_connect_url = "${createLink(controller: 'consoleCharts', action: 'connect')}";
         var console_charts_data_url = "${createLink(controller: 'consoleCharts', action: 'data')}";
     </script>

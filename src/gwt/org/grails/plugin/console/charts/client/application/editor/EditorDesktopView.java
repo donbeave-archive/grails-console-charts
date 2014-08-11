@@ -15,7 +15,6 @@
  */
 package org.grails.plugin.console.charts.client.application.editor;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -48,12 +47,11 @@ public class EditorDesktopView extends ViewWithUiHandlers<EditorUiHandlers>
     @Inject
     EditorDesktopView(final Binder binder) {
         container = new SplitLayoutPanel(2);
+        container.setHeight("100%");
         queryEditor = new GWTCodeMirror("sql");
         appearanceEditor = new GWTCodeMirror("groovy");
 
         initWidget(binder.createAndBindUi(this));
-
-        asWidget().getElement().getStyle().setHeight(100, Style.Unit.PCT);
     }
 
     @Override

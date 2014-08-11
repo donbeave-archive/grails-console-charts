@@ -135,9 +135,17 @@ class ConsoleChartsController {
                 content = parse(rs)
             }
 
+            def columns = []
+
+            ResultSetMetaData metaData = rs.metaData
+
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                columns.add metaData.getColumnName(i)
+            }
+
             rs.last()
 
-            render(text: [content: content, count: rs.row] as JSON)
+            render(text: [content: content, columns: columns, count: rs.row] as JSON)
 
             stmt.close()
             connection.close()
@@ -222,20 +230,21 @@ class ConsoleChartsController {
 
     static List parse(ResultSet rs) {
         def content = []
-        def columns = []
-
-        ResultSetMetaData metaData = rs.metaData
-
-        for (int i = 1; i <= metaData.getColumnCount(); i++) {
-            columns.add metaData.getColumnName(i)
-        }
-
-        content.add columns
 
         while (rs.next()) {
-            def item = []
-            for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                item.add i > 1 ? rs.getInt(i) : rs.getString(i)
+            def item = [:]
+            for (int i = 1; i <= rs.metaData.getColumnCount(); i++) {
+                def value = i == 1 ? rs.getString(i) : null
+
+                if (i > 1) {
+                    try {
+                        value = rs.getInt(i);
+                    } catch (e) {
+                        // ignore
+                    }
+                }
+
+                item[rs.metaData.getColumnName(i)] = value
             }
 
             content.add item
