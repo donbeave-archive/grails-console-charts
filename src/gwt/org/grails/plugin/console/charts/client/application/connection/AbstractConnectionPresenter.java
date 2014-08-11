@@ -17,10 +17,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import org.grails.plugin.console.charts.client.application.AppUtils;
-import org.grails.plugin.console.charts.client.place.NameTokens;
-import org.grails.plugin.console.charts.client.place.ParameterTokens;
 import org.grails.plugin.console.charts.shared.ConnectionDetails;
 import org.grails.plugin.console.charts.shared.events.ConnectedEvent;
 

@@ -15,6 +15,11 @@
  */
 package org.grails.plugin.console.charts.client.application;
 
+import com.dianaui.universal.core.client.ui.Anchor;
+import com.dianaui.universal.core.client.ui.AnchorListItem;
+import com.dianaui.universal.core.client.ui.constants.IconSize;
+import com.dianaui.universal.core.client.ui.constants.IconType;
+import com.dianaui.universal.core.client.ui.html.Div;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
@@ -30,11 +35,6 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import org.gwtbootstrap3.client.ui.Anchor;
-import org.gwtbootstrap3.client.ui.AnchorListItem;
-import org.gwtbootstrap3.client.ui.constants.IconSize;
-import org.gwtbootstrap3.client.ui.constants.IconType;
-import org.gwtbootstrap3.client.ui.html.Div;
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>

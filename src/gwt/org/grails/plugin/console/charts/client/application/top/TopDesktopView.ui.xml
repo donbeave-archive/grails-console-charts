@@ -1,15 +1,15 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
-             xmlns:html="urn:import:org.gwtbootstrap3.client.ui.html">
-    <html:Div b:id="header">
+             xmlns:b="urn:import:com.dianaui.universal.core.client.ui"
+             xmlns:b.html="urn:import:com.dianaui.universal.core.client.ui.html">
+    <b.html:Div b:id="header">
         <b:Navbar>
-            <html:Span styleName="navbar-brand">Grails Charts Console</html:Span>
-            <html:Div styleName="navbar-form" addStyleNames="pull-right">
+            <b.html:Span styleName="navbar-brand">Grails Charts Console</b.html:Span>
+            <b.html:Div styleName="navbar-form" addStyleNames="pull-right">
                 <b:Tooltip text="Could not connect to server" placement="LEFT" ui:field="connectTooltip">
                     <b:Button fontAwesomeIcon="CIRCLE" size="SMALL" ui:field="connectButton"/>
                 </b:Tooltip>
-            </html:Div>
+            </b.html:Div>
         </b:Navbar>
-    </html:Div>
+    </b.html:Div>
 </ui:UiBinder>

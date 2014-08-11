@@ -38,6 +38,31 @@ grails.project.dependency.resolution = {
             export = false
         }
 
+        // GWT dependencies
+        provided 'com.gwtplatform:gwtp-mvp-client:1.2.1', {
+            excludes 'maven-artifact'
+            export = false
+        }
+        provided 'commons-lang:commons-lang:2.6', { // need by GWTP
+            export = false
+        }
+        provided 'org.apache.maven:maven-artifact:2.2.1', { // need by GWTP
+            export = false
+        }
+        provided 'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT', {
+            export = false
+        }
+        provided 'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT', {
+            export = false
+        }
+        provided 'edu.stanford.protege:codemirror-gwt:1.0.0', {
+            excludes 'gwt-servlet'
+            export = false
+        }
+        provided 'com.google.guava:guava-gwt:17.0', {
+            export = false
+        }
+
         test 'org.grails:grails-datastore-test-support:1.0-grails-2.4'
     }
 
@@ -64,18 +89,7 @@ grails.project.dependency.resolution = {
 gwt {
     version = '2.6.1'
     gin.version = '2.1.2'
-    dependencies = [
-            'com.gwtplatform:gwtp-mvp-shared:1.2.1',
-            'com.gwtplatform:gwtp-mvp-client:1.2.1',
-            'com.gwtplatform:gwtp-clients-common:1.2.1',
-            'edu.stanford.protege:codemirror-gwt:1.0.0',
-            'com.google.guava:guava-gwt:17.0',
-            'com.gwt-widgets:gwt-widgets-core:0.1',
-            // need by GWTP
-            'org.apache.velocity:velocity:1.7',
-            'commons-lang:commons-lang:2.6',
-            'org.apache.maven:maven-artifact:2.2.1'
-    ]
+    use.provided.deps = true
     if (Environment.isDevelopmentMode()) {
         compile.args = {
             arg(value: '-draftCompile')

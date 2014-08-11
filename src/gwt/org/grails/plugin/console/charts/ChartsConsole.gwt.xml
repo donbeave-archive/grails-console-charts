@@ -4,10 +4,10 @@
 <module rename-to="GrailsChartsConsole">
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="com.gwtplatform.mvp.MvpWithFormFactor"/>
-    <inherits name="org.gwtbootstrap3.GwtBootstrap3CDN"/>
-    <inherits name="edu.stanford.bmir.gwtcodemirror.GWTCodeMirrorModule"/>
     <inherits name="com.google.gwt.json.JSON"/>
+    <inherits name="com.dianaui.universal.core.DianaUICoreCDN"/>
     <inherits name="com.dianaui.universal.gwtp.DianaUniversalGWTP"/>
+    <inherits name="edu.stanford.bmir.gwtcodemirror.GWTCodeMirrorModule"/>
 
     <inherits name='com.google.web.bindery.autobean.AutoBean'/>
     <inherits name='com.google.gwt.editor.Editor'/>

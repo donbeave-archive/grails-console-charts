@@ -1,5 +1,6 @@
 package org.grails.plugin.console.charts.client.application.connection;
 
+import com.dianaui.universal.core.client.ui.*;
 import com.dianaui.universal.gwtp.client.ModalViewWithUiHandlers;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -10,7 +11,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.grails.plugin.console.charts.shared.ConnectionDetails;
-import org.gwtbootstrap3.client.ui.*;
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
