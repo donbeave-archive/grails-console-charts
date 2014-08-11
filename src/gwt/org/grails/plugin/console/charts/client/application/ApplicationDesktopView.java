@@ -30,6 +30,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -110,7 +111,13 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         Document.get().getElementById(CHART_ID).removeAllChildren();
 
+        if (result.get("columns") == null) {
+            Window.alert("Columns is empty!");
+            return;
+        }
+
         JSONArray columns = result.get("columns").isArray();
+        JSONObject override = result.get("override") != null ? result.get("override").isObject() : null;
 
         String axes = "{\n" +
                 "\"id\": \"v1\",\n" +
@@ -123,14 +130,17 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
         String graphs = "";
 
         for (int i = 1; columns.size() > i; i++) {
+            String col = columns.get(i).toString();
+
             graphs += (graphs.equals("") ? "" : ",") + "{\n" +
                     "\"bullet\": \"round\",\n" +
-                    "\"valueField\": " + columns.get(i).toString() + ",\n" +
+                    "\"valueField\": " + col + ",\n" +
                     "\"valueAxis\": \"v" + i + "\",\n" +
                     "\"bullet\": \"round\",\n" +
                     "\"bulletBorderThickness\": 1,\n" +
                     "\"hideBulletsCount\": 30,\n" +
-                    "\"title\": " + columns.get(i).toString() + ",\n" +
+                    "\"title\": " + (override != null && override.get(col) != null && override.get(col).isString() != null ?
+                    override.get(col) : col) + ",\n" +
                     "\"fillAlphas\": 0\n" +
                     "}";
         }

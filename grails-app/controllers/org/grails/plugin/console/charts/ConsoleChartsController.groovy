@@ -119,13 +119,23 @@ class ConsoleChartsController {
 
             ResultSet rs = stmt.executeQuery(queries.size() > 1 ? queries.last() : query)
 
-            def content
+            def columns = null
+            def content = null
+            def override = null
 
             if (appearance) {
                 try {
                     def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
 
-                    content = consoleService.eval(appearance, bindingValues)
+                    def result = consoleService.eval(appearance, bindingValues)
+
+                    if (result instanceof Map) {
+                        content = result.content
+                        columns = result.columns
+                        override = result.override
+                    } else {
+                        content = result
+                    }
                 }
                 catch (Throwable t) {
                     render(text: [error: t.localizedMessage] as JSON)
@@ -135,17 +145,9 @@ class ConsoleChartsController {
                 content = parse(rs)
             }
 
-            def columns = []
-
-            ResultSetMetaData metaData = rs.metaData
-
-            for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                columns.add metaData.getColumnName(i)
-            }
-
             rs.last()
 
-            render(text: [content: content, columns: columns, count: rs.row] as JSON)
+            render(text: [content: content, columns: columns ?: getColumns(rs), override: override, count: rs.row] as JSON)
 
             stmt.close()
             connection.close()
@@ -251,6 +253,43 @@ class ConsoleChartsController {
         }
 
         content
+    }
+
+    static List toList(ResultSet rs) {
+        def content = []
+
+        while (rs.next()) {
+            def item = []
+            for (int i = 1; i <= rs.metaData.getColumnCount(); i++) {
+                def value = i == 1 ? rs.getString(i) : null
+
+                if (i > 1) {
+                    try {
+                        value = rs.getInt(i);
+                    } catch (e) {
+                        // ignore
+                    }
+                }
+
+                item.add value
+            }
+
+            content.add item
+        }
+
+        content
+    }
+
+    List getColumns(ResultSet rs) {
+        def result = []
+
+        ResultSetMetaData metaData = rs.metaData
+
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {
+            result.add metaData.getColumnName(i)
+        }
+
+        result
     }
 
 }
