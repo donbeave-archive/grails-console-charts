@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
         }
 
         // GWT dependencies
-        provided 'com.gwtplatform:gwtp-mvp-client:1.2.1', {
+        provided 'com.gwtplatform:gwtp-mvp-client:1.3', {
             excludes 'maven-artifact'
             export = false
         }
