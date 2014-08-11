@@ -280,7 +280,7 @@ class ConsoleChartsController {
         content
     }
 
-    List getColumns(ResultSet rs) {
+    static List getColumns(ResultSet rs) {
         def result = []
 
         ResultSetMetaData metaData = rs.metaData
