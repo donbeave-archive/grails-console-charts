@@ -38,31 +38,6 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        // GWT dependencies
-        provided 'com.gwtplatform:gwtp-mvp-client:1.3', {
-            excludes 'maven-artifact'
-            export = false
-        }
-        provided 'commons-lang:commons-lang:2.6', { // need by GWTP
-            export = false
-        }
-        provided 'org.apache.maven:maven-artifact:2.2.1', { // need by GWTP
-            export = false
-        }
-        provided 'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT', {
-            export = false
-        }
-        provided 'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT', {
-            export = false
-        }
-        provided 'edu.stanford.protege:codemirror-gwt:1.0.0', {
-            excludes 'gwt-servlet'
-            export = false
-        }
-        provided 'com.google.guava:guava-gwt:17.0', {
-            export = false
-        }
-
         test 'org.grails:grails-datastore-test-support:1.0-grails-2.4'
     }
 
@@ -74,12 +49,11 @@ grails.project.dependency.resolution = {
         }
         runtime ':console:1.4.4'
         compile(':asset-pipeline:1.9.4',
-                ':extended-dependency-manager:0.5.6',
                 ':hibernate4:4.3.5.4',
                 ':resources:1.2.8') {
             export = false
         }
-        compile ':gwt:1.0.1', {
+        compile ':gwt:1.1.0-SNAPSHOT', {
             transitive = false
             export = false
         }
@@ -88,19 +62,33 @@ grails.project.dependency.resolution = {
 
 gwt {
     version = '2.6.1'
-    gin.version = '2.1.2'
-    use.provided.deps = true
-    if (Environment.isDevelopmentMode()) {
-        compile.args = {
-            arg(value: '-draftCompile')
-            arg(value: '-localWorkers')
-            arg(value: '8')
-        }
-    }
-    run.args = {
-        jvmarg(value: '-Xms1024m')
-        jvmarg(value: '-Xmx4096m')
-    }
 
-    javac.cmd = 'javac' // Need for JDK 1.8
+    if (System.properties.getProperty('gwt')) {
+        gin.version = '2.1.2'
+        dependencies = [
+                'com.gwtplatform:gwtp-mvp-client:1.3',
+                'com.gwtplatform:gwtp-clients-common:1.3',
+                'com.gwtplatform:gwtp-mvp-shared:1.3',
+                'org.apache.velocity:velocity:1.7',
+                'commons-lang:commons-lang:2.6',
+                'org.apache.maven:maven-artifact:2.2.1',
+                'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
+                'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
+                'edu.stanford.protege:codemirror-gwt:1.0.0',
+                'com.google.guava:guava-gwt:17.0'
+        ]
+        if (Environment.isDevelopmentMode()) {
+            compile.args = {
+                arg(value: '-draftCompile')
+                arg(value: '-localWorkers')
+                arg(value: '8')
+            }
+        }
+        run.args = {
+            jvmarg(value: '-Xms1024m')
+            jvmarg(value: '-Xmx4096m')
+        }
+
+        javac.cmd = 'javac' // Need for JDK 1.8
+    }
 }
