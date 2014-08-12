@@ -57,6 +57,8 @@ class ConsoleChartsController {
         if (password != null)
             info.put('password', password)
 
+        Class.forName('com.mysql.jdbc.Driver')
+
         def con = DriverManager.getConnection("jdbc:mysql://${host}:${port}", info, Holders.grailsApplication.class)
         con.autoCommit = false
         con
