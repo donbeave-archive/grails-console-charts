@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
                 ':resources:1.2.8') {
             export = false
         }
-        compile ':gwt:1.1.0-SNAPSHOT', {
+        compile ':gwt:2.0-SNAPSHOT', {
             transitive = false
             export = false
         }
