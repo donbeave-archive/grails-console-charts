@@ -62,16 +62,10 @@ grails.project.dependency.resolution = {
 
 gwt {
     version = '2.6.1'
-
     if (System.properties.getProperty('gwt')) {
         gin.version = '2.1.2'
+        gwtp.version = '1.3'
         dependencies = [
-                'com.gwtplatform:gwtp-mvp-client:1.3',
-                'com.gwtplatform:gwtp-clients-common:1.3',
-                'com.gwtplatform:gwtp-mvp-shared:1.3',
-                'org.apache.velocity:velocity:1.7',
-                'commons-lang:commons-lang:2.6',
-                'org.apache.maven:maven-artifact:2.2.1',
                 'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
                 'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
                 'edu.stanford.protege:codemirror-gwt:1.0.0',
