@@ -93,6 +93,12 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
         if (connectionString != null)
             AppUtils.CONNECTION_STRING = URL.decodePathSegment(connectionString);
 
+        if (query != null)
+            query = AppUtils.decodeBase64(URL.decodePathSegment(query));
+
+        if (appearance != null)
+            appearance = AppUtils.decodeBase64(URL.decodePathSegment(appearance));
+
         if (query != null && !query.equals(this.query)) {
             this.query = query;
             result = null;
@@ -110,7 +116,8 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
 
     @Override
     public void onViewChanged(String view) {
-        PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME).with(ParameterTokens.QUERY, query)
+        PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME)
+                .with(ParameterTokens.QUERY, AppUtils.encodeBase64(URL.encodePathSegment(query)))
                 .with(ParameterTokens.CONNECTION_STRING, URL.encodePathSegment(AppUtils.CONNECTION_STRING))
                 .with(ParameterTokens.VIEW, view).build();
 
@@ -140,8 +147,9 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                 getView().loading();
 
                 try {
-                    RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, AppUtils.getDataPath() + "?query=" +
-                            URL.encodeQueryString(query) + "&appearance=" + URL.encodePathSegment(appearance) +
+                    RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, AppUtils.getDataPath() +
+                            "?query=" + URL.encodeQueryString(AppUtils.encodeBase64(query)) +
+                            "&appearance=" + URL.encodePathSegment(AppUtils.encodeBase64(appearance)) +
                             "&connectionString=" + URL.encodePathSegment(AppUtils.CONNECTION_STRING));
 
                     rb.setCallback(new RequestCallback() {
@@ -155,13 +163,13 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
 
                         @Override
                         public void onError(Request request, Throwable exception) {
-                            Window.alert("Error occurred" + exception.getMessage());
+                            Window.alert("Error occurred: " + exception.getMessage());
                         }
                     });
 
                     rb.send();
                 } catch (RequestException e) {
-                    Window.alert("Error occurred" + e.getMessage());
+                    Window.alert("Error occurred: " + e.getMessage());
                 }
             }
         } else {

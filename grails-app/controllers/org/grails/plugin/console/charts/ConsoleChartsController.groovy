@@ -73,6 +73,8 @@ class ConsoleChartsController {
             return;
         }
 
+        query = new String(query.decodeBase64())
+
         List<String> queries = query.split(';')
 
         connectionString = chartsEncryprionService.decrypt(connectionString)
@@ -129,7 +131,7 @@ class ConsoleChartsController {
                 try {
                     def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
 
-                    def result = consoleService.eval(appearance, bindingValues)
+                    def result = consoleService.eval(new String(appearance.decodeBase64()), bindingValues)
 
                     if (result instanceof Map) {
                         content = result.content

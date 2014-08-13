@@ -59,8 +59,9 @@ public class AbstractEditorPresenter extends PresenterWidget<AbstractEditorPrese
         if (query != null && !query.equals("")) {
             PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME)
                     .with(ParameterTokens.CONNECTION_STRING, URL.encodePathSegment(AppUtils.CONNECTION_STRING))
-                    .with(ParameterTokens.APPEARANCE, getView().getAppearanceEditor().getValue())
-                    .with(ParameterTokens.QUERY, query).build();
+                    .with(ParameterTokens.APPEARANCE,
+                            URL.encodePathSegment(AppUtils.encodeBase64(getView().getAppearanceEditor().getValue())))
+                    .with(ParameterTokens.QUERY, URL.encodePathSegment(AppUtils.encodeBase64(query))).build();
             placeManager.revealPlace(request);
         }
     }

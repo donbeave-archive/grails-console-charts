@@ -15,4 +15,12 @@ public class AppUtils {
         return $wnd.console_charts_data_url;
     }-*/;
 
+    public static native String decodeBase64(final String base64) /*-{
+        return $wnd.atob(base64);
+    }-*/;
+
+    public static native String encodeBase64(final String input) /*-{
+        return $wnd.btoa(input);
+    }-*/;
+
 }
