@@ -62,27 +62,23 @@ grails.project.dependency.resolution = {
 
 gwt {
     version = '2.6.1'
-    if (System.properties.getProperty('gwt')) {
-        gin.version = '2.1.2'
-        gwtp.version = '1.3'
-        dependencies = [
-                'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
-                'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
-                'edu.stanford.protege:codemirror-gwt:1.0.0',
-                'com.google.guava:guava-gwt:17.0'
-        ]
-        if (Environment.isDevelopmentMode()) {
-            compile.args = {
-                arg(value: '-draftCompile')
-                arg(value: '-localWorkers')
-                arg(value: '8')
-            }
+    gin.version = '2.1.2'
+    gwtp.version = '1.3'
+    guava.version = '17.0'
+    dependencies = [
+            'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
+            'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
+            'edu.stanford.protege:codemirror-gwt:1.0.0'
+    ]
+    if (Environment.isDevelopmentMode()) {
+        compile.args = {
+            arg(value: '-draftCompile')
+            arg(value: '-localWorkers')
+            arg(value: '8')
         }
-        run.args = {
-            jvmarg(value: '-Xms1024m')
-            jvmarg(value: '-Xmx4096m')
-        }
-
-        javac.cmd = 'javac' // Need for JDK 1.8
+    }
+    run.args = {
+        jvmarg(value: '-Xms1024m')
+        jvmarg(value: '-Xmx4096m')
     }
 }
