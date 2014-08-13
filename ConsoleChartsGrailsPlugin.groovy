@@ -27,7 +27,7 @@ class ConsoleChartsGrailsPlugin {
     def author = 'Alexey Zhokhov'
     def authorEmail = 'donbeave@gmail.com'
     def description = '''\
-A web-based console plugin for drawing [Google Charts|https://developers.google.com/chart/] direct by data from SQL queries
+A web-based console plugin for drawing [amChartsa|http://www.amcharts.com/] direct by data from SQL queries
 '''
 
     def documentation = 'http://grails.org/plugin/console-charts'
