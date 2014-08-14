@@ -150,7 +150,12 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                 "\"theme\": \"none\",\n" +
                 "\"pathToImages\": \"http://www.amcharts.com/lib/3/images/\",\n" +
                 "\"legend\": {\n" +
-                "  \"useGraphSettings\": true\n" +
+                "  \"align\": \"center\",\n" +
+                "  \"equalWidths\": false,\n" +
+                "  \"periodValueText\": \"total: [[value.sum]]\",\n" +
+                "  \"valueAlign\": \"left\",\n" +
+                "  \"valueText\": \"[[value]] ([[percents]]%)\",\n" +
+                "  \"valueWidth\": 100\n" +
                 "},\n" +
                 "\"dataDateFormat\": \"YYYY-MM-DD HH:NN\",\n" +
                 "\"dataProvider\": " + result.get("content").toString() + ",\n" +
