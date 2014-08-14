@@ -71,11 +71,8 @@ gwt {
             'edu.stanford.protege:codemirror-gwt:1.0.0'
     ]
     if (Environment.isDevelopmentMode()) {
-        compile.args = {
-            arg(value: '-draftCompile')
-            arg(value: '-localWorkers')
-            arg(value: '8')
-        }
+        draft.compile = true
+        local.workers = 8
     }
     run.args = {
         jvmarg(value: '-Xms1024m')
