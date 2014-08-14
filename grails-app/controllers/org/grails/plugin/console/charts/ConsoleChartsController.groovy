@@ -68,96 +68,101 @@ class ConsoleChartsController {
     def consoleService
 
     def data(String query, String connectionString, String appearance) {
-        if (!query) {
-            render([error: true, text: 'Query is empty'] as JSON)
-            return;
-        }
-
-        query = new String(query.decodeBase64())
-
-        List<String> queries = query.split(';')
-
-        connectionString = chartsEncryprionService.decrypt(connectionString)
-
-        if (!connectionString.contains('{')) {
-            render(text: [error: 'connection_string_wrong'] as JSON)
-            return;
-        }
-
-        def json = JSON.parse(connectionString)
-
-        Session sshSession = null
-
-        String mysqlHostname = json.mysqlHostname ?: 'localhost'
-        Integer mysqlPort = json.mysqlPort ?: 3306
-
-        if (json.sshToggle) {
-            mysqlPort = 3369
-            mysqlHostname = 'localhost'
-
-            sshSession = doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
-                    json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
-        }
-
         try {
-            Connection connection =
-                    connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
-
-            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
-
-            if (queries.size() > 1) {
-                queries.eachWithIndex { entry, i ->
-                    if (i != (queries.size() - 1))
-                        stmt.addBatch(entry)
-                }
-
-                stmt.executeBatch()
-                stmt.close()
-
-                // re-init statement
-                stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
+            if (!query) {
+                render([error: true, text: 'Query is empty'] as JSON)
+                return
             }
 
-            //        if (!query.toLowerCase().contains('limit'))
+            query = new String(query.decodeBase64())
+
+            List<String> queries = query.split(';')
+
+            connectionString = chartsEncryprionService.decrypt(connectionString)
+
+            if (!connectionString.contains('{')) {
+                render(text: [error: 'connection_string_wrong'] as JSON)
+                return
+            }
+
+            def json = JSON.parse(connectionString)
+
+            Session sshSession = null
+
+            String mysqlHostname = json.mysqlHostname ?: 'localhost'
+            Integer mysqlPort = json.mysqlPort ?: 3306
+
+            if (json.sshToggle) {
+                mysqlPort = 3369
+                mysqlHostname = 'localhost'
+
+                sshSession = doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
+                        json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
+            }
+
+            try {
+                Connection connection =
+                        connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
+
+                Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
+
+                if (queries.size() > 1) {
+                    queries.eachWithIndex { entry, i ->
+                        if (i != (queries.size() - 1))
+                            stmt.addBatch(entry)
+                    }
+
+                    stmt.executeBatch()
+                    stmt.close()
+
+                    // re-init statement
+                    stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
+                }
+
+                //        if (!query.toLowerCase().contains('limit'))
 //            query += ' LIMIT 100'
 
-            ResultSet rs = stmt.executeQuery(queries.size() > 1 ? queries.last() : query)
+                ResultSet rs = stmt.executeQuery(queries.size() > 1 ? queries.last() : query)
 
-            def columns = null
-            def content = null
-            def override = null
+                def columns = null
+                def content = null
+                def override = null
 
-            if (appearance) {
-                try {
-                    def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
+                if (appearance) {
+                    try {
+                        def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
 
-                    def result = consoleService.eval(new String(appearance.decodeBase64()), bindingValues)
+                        def result = consoleService.eval(new String(appearance.decodeBase64()), bindingValues)
 
-                    if (result instanceof Map) {
-                        content = result.content
-                        columns = result.columns
-                        override = result.override
-                    } else {
-                        content = result
+                        if (result instanceof Map) {
+                            content = result.content
+                            columns = result.columns
+                            override = result.override
+                        } else {
+                            content = result
+                        }
                     }
+                    catch (Throwable t) {
+                        render(text: [error: t.localizedMessage] as JSON)
+                        return
+                    }
+                } else {
+                    content = parse(rs)
                 }
-                catch (Throwable t) {
-                    render(text: [error: t.localizedMessage] as JSON)
-                    return;
-                }
-            } else {
-                content = parse(rs)
+
+                rs.last()
+
+                render(text: [content: content, columns: columns ?: getColumns(rs), override: override, count: rs.row] as JSON)
+
+                stmt.close()
+                connection.close()
             }
-
-            rs.last()
-
-            render(text: [content: content, columns: columns ?: getColumns(rs), override: override, count: rs.row] as JSON)
-
-            stmt.close()
-            connection.close()
-        }
-        finally {
-            sshSession?.disconnect()
+            finally {
+                sshSession?.disconnect()
+            }
+        } catch (e) {
+            render(text: [error: e.localizedMessage] as JSON)
+            return
         }
     }
 
@@ -232,6 +237,7 @@ class ConsoleChartsController {
         } else {
             // maybe
         }
+
     }
 
     static List parse(ResultSet rs) {

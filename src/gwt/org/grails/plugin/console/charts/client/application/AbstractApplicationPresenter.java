@@ -20,7 +20,6 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
@@ -51,6 +50,10 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
     public interface MyView extends View, HasUiHandlers<ApplicationUiHandlers> {
 
         void loading();
+
+        void error(JSONObject result);
+
+        void error(String error);
 
         void view(String type, JSONObject result);
 
@@ -139,7 +142,7 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
         if (result == null) {
             if (query != null) {
                 if (AppUtils.CONNECTION_STRING == null) {
-                    Window.alert("Not connected to server");
+                    getView().error("Not connected to server");
 
                     return;
                 }
@@ -158,18 +161,23 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                             JSONValue value = JSONParser.parseStrict(response.getText());
                             result = value.isObject();
 
+                            if (result.get("error") != null) {
+                                getView().error(result);
+                                return;
+                            }
+
                             getView().view(view, result);
                         }
 
                         @Override
                         public void onError(Request request, Throwable exception) {
-                            Window.alert("Error occurred: " + exception.getMessage());
+                            getView().error("Error occurred: " + exception.getMessage());
                         }
                     });
 
                     rb.send();
                 } catch (RequestException e) {
-                    Window.alert("Error occurred: " + e.getMessage());
+                    getView().error("Error occurred: " + e.getMessage());
                 }
             }
         } else {

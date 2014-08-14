@@ -175,3 +175,12 @@ body[data-theme="default"] .modal-dialog .modal-footer {
     margin-left: -0.666666665em;
     color: black;
 }
+
+#result.error {
+    padding-top: 200px;
+}
+
+#result.error .alert {
+    width: 500px;
+    margin: 0 auto;
+}

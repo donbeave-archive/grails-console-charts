@@ -15,8 +15,10 @@
  */
 package org.grails.plugin.console.charts.client.application;
 
+import com.dianaui.universal.core.client.ui.Alert;
 import com.dianaui.universal.core.client.ui.AnchorListItem;
 import com.dianaui.universal.core.client.ui.FontAwesomeIcon;
+import com.dianaui.universal.core.client.ui.constants.AlertType;
 import com.dianaui.universal.core.client.ui.constants.IconSize;
 import com.dianaui.universal.core.client.ui.constants.IconType;
 import com.dianaui.universal.core.client.ui.html.Div;
@@ -95,6 +97,25 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
         loading.setSpin(true);
 
         rightContainer.add(loading);
+    }
+
+    @Override
+    public void error(JSONObject result) {
+        if (result.get("error") != null) {
+            error(result.get("error").isString().stringValue());
+        }
+    }
+
+    @Override
+    public void error(String error) {
+        Alert alert = new Alert();
+        alert.setType(AlertType.DANGER);
+        alert.setText(error);
+
+        clear();
+
+        rightContainer.add(alert);
+        rightContainer.setStyleName("error");
     }
 
     @Override
@@ -237,6 +258,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     private void clear() {
         rightContainer.clear();
         rightContainer.getElement().removeAllChildren();
+        rightContainer.setStyleName("");
     }
 
 }
