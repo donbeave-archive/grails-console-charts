@@ -23,6 +23,9 @@ import org.grails.plugin.console.charts.client.application.connection.Connection
 import org.grails.plugin.console.charts.client.application.editor.AbstractEditorPresenter;
 import org.grails.plugin.console.charts.client.application.editor.EditorDesktopPresenterWidget;
 import org.grails.plugin.console.charts.client.application.editor.EditorDesktopView;
+import org.grails.plugin.console.charts.client.application.share.AbstractSharePresenter;
+import org.grails.plugin.console.charts.client.application.share.ShareDesktopPresenter;
+import org.grails.plugin.console.charts.client.application.share.ShareDesktopView;
 import org.grails.plugin.console.charts.client.application.top.AbstractTopPresenter;
 import org.grails.plugin.console.charts.client.application.top.TopDesktopPresenterWidget;
 import org.grails.plugin.console.charts.client.application.top.TopDesktopView;
@@ -58,6 +61,12 @@ public class ApplicationDesktopModule extends AbstractPresenterModule {
         bind(ConnectionDesktopView.class).in(Singleton.class);
         bind(AbstractConnectionPresenter.MyView.class).to(ConnectionDesktopView.class);
         bind(AbstractConnectionPresenter.class).to(ConnectionDesktopPresenter.class);
+
+        // Share Presenter
+        bind(ShareDesktopPresenter.class).in(Singleton.class);
+        bind(ShareDesktopView.class).in(Singleton.class);
+        bind(AbstractSharePresenter.MyView.class).to(ShareDesktopView.class);
+        bind(AbstractSharePresenter.class).to(ShareDesktopPresenter.class);
     }
 
 }

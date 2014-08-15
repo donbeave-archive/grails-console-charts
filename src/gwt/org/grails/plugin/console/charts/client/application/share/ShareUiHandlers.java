@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.grails.plugin.console.charts.client.application.share;
 
-class ConsoleChartsUrlMappings {
-    static mappings = {
-        "/console/charts"(view: 'consoleCharts/index')
-        "/console/charts/$action"(controller: 'consoleCharts')
-    }
+import com.gwtplatform.mvp.client.UiHandlers;
+
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
+public interface ShareUiHandlers extends UiHandlers {
+
+    void onGetLinkClicked();
 }

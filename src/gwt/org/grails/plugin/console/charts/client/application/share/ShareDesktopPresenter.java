@@ -13,10 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.grails.plugin.console.charts.client.application.share;
 
-class ConsoleChartsUrlMappings {
-    static mappings = {
-        "/console/charts"(view: 'consoleCharts/index')
-        "/console/charts/$action"(controller: 'consoleCharts')
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
+public class ShareDesktopPresenter extends AbstractSharePresenter {
+
+    @Inject
+    ShareDesktopPresenter(final EventBus eventBus,
+                          final MyView view,
+                          final PlaceManager placeManager) {
+        super(eventBus, view, placeManager);
     }
+
 }

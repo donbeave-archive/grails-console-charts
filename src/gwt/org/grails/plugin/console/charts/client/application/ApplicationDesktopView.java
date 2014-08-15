@@ -17,6 +17,7 @@ package org.grails.plugin.console.charts.client.application;
 
 import com.dianaui.universal.core.client.ui.Alert;
 import com.dianaui.universal.core.client.ui.AnchorListItem;
+import com.dianaui.universal.core.client.ui.Button;
 import com.dianaui.universal.core.client.ui.FontAwesomeIcon;
 import com.dianaui.universal.core.client.ui.constants.AlertType;
 import com.dianaui.universal.core.client.ui.constants.IconSize;
@@ -79,6 +80,9 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     @UiField
     AnchorListItem pieChartButton;
 
+    @UiField
+    Button shareButton;
+
     @Inject
     ApplicationDesktopView(final Binder binder) {
         container = new SplitLayoutPanel(3);
@@ -124,8 +128,8 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         DivElement div = Document.get().createDivElement();
         div.setId(CHART_ID);
-        div.getStyle().setWidth(900, Style.Unit.PX);
-        div.getStyle().setHeight(500, Style.Unit.PX);
+        div.getStyle().setWidth(AppUtils.DEFAULT_WIDTH, Style.Unit.PX);
+        div.getStyle().setHeight(AppUtils.DEFAULT_HEIGHT, Style.Unit.PX);
         div.getStyle().setProperty("margin", "0 auto");
 
         rightContainer.getElement().appendChild(div);
@@ -154,7 +158,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
             String col = columns.get(i).toString();
 
             graphs += (graphs.equals("") ? "" : ",") + "{\n" +
-                    "\"bullet\": \"round\",\n" +
+                    "\"id\": \"g" + i + "\",\n" +
                     "\"valueField\": " + col + ",\n" +
                     "\"valueAxis\": \"v" + i + "\",\n" +
                     "\"bullet\": \"round\",\n" +
@@ -165,6 +169,13 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                     "\"fillAlphas\": 0\n" +
                     "}";
         }
+
+        String scrollbar = (columns.size() > 1) ?
+                "{\n" +
+                        "  \"autoGridCount\": true,\n" +
+                        "  \"graph\": \"g1\",\n" +
+                        "  \"scrollbarHeight\": 40\n" +
+                        "}," : "{},";
 
         String content = "AmCharts.makeChart(\"" + CHART_ID + "\", {" +
                 "\"type\": \"serial\",\n" +
@@ -182,7 +193,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                 "\"dataProvider\": " + result.get("content").toString() + ",\n" +
                 "\"valueAxes\": [" + axes + "],\n" +
                 "\"graphs\": [" + graphs + "],\n" +
-                "\"chartScrollbar\": {},\n" +
+                "\"chartScrollbar\": " + scrollbar + "\n" +
                 "\"chartCursor\": {},\n" +
                 "\"categoryField\": " + columns.get(0) + ",\n" +
                 "\"categoryAxis\": {\n" +
@@ -253,6 +264,11 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     @UiHandler("pieChartButton")
     void onPieChartClicked(ClickEvent event) {
         getUiHandlers().onViewChanged("Pie");
+    }
+
+    @UiHandler("shareButton")
+    void onShareClicked(ClickEvent event) {
+        getUiHandlers().onShareClicked();
     }
 
     private void clear() {

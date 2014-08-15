@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import org.grails.plugin.console.charts.client.application.editor.EditorDesktopPresenterWidget;
+import org.grails.plugin.console.charts.client.application.share.ShareDesktopPresenter;
 import org.grails.plugin.console.charts.client.application.top.TopDesktopPresenterWidget;
 
 /**
@@ -35,8 +36,9 @@ public class ApplicationDesktopPresenter extends AbstractApplicationPresenter {
                                 final MyProxy proxy,
                                 final TopDesktopPresenterWidget topPresenter,
                                 final EditorDesktopPresenterWidget editorPresenter,
-                                final PlaceManager placeManager) {
-        super(eventBus, view, proxy, RevealType.RootLayout, placeManager);
+                                final PlaceManager placeManager,
+                                final ShareDesktopPresenter sharePresenter) {
+        super(eventBus, view, proxy, RevealType.RootLayout, placeManager, sharePresenter);
 
         this.topPresenter = topPresenter;
         this.editorPresenter = editorPresenter;
@@ -54,12 +56,12 @@ public class ApplicationDesktopPresenter extends AbstractApplicationPresenter {
     protected void onReset() {
         super.onReset();
 
-        if (query != null) {
-            editorPresenter.getView().getQueryEditor().setValue(query);
+        if (AppUtils.QUERY != null) {
+            editorPresenter.getView().getQueryEditor().setValue(AppUtils.QUERY);
         }
 
-        if (appearance != null) {
-            editorPresenter.getView().getAppearanceEditor().setValue(appearance);
+        if (AppUtils.APPEARANCE != null) {
+            editorPresenter.getView().getAppearanceEditor().setValue(AppUtils.APPEARANCE);
         }
     }
 

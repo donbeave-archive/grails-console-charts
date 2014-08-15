@@ -90,19 +90,19 @@ public class AbstractConnectionPresenter extends PresenterWidget<AbstractConnect
                         String exception = result.get("exception") != null ?
                                 result.get("exception").isString().stringValue() : null;
 
-                        Window.alert("Error occurred" + (exception != null ? " (" + exception + ") " : "") + error);
+                        Window.alert("Error occurred: " + (exception != null ? " (" + exception + ") " : "") + error);
                     }
                 }
 
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    Window.alert("Error occurred" + exception.getMessage());
+                    Window.alert("Error occurred: " + exception.getMessage());
                 }
             });
 
             rb.send();
         } catch (RequestException e) {
-            Window.alert("Error occurred" + e.getMessage());
+            Window.alert("Error occurred: " + e.getMessage());
         }
     }
 

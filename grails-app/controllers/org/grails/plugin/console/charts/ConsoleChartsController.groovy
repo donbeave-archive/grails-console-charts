@@ -15,14 +15,12 @@
  */
 package org.grails.plugin.console.charts
 
-import com.jcraft.jsch.JSch
-import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
 import grails.converters.JSON
-import grails.util.Holders
 import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
 
-import java.sql.*
+import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
@@ -31,140 +29,8 @@ class ConsoleChartsController {
 
     static defaultAction = 'data'
 
-    static Session doSshTunnel(String host = 'localhost', int port = 22, String user, String password,
-                               String remoteHost, int localPort, int nRemotePort) throws JSchException {
-        JSch jsch = new JSch()
-        Session session = jsch.getSession(user, host, port)
-        session.password = password
-
-        Properties config = new Properties()
-        config.put('StrictHostKeyChecking', 'no')
-        session.config = config
-
-        session.connect()
-        session.setPortForwardingL(localPort, remoteHost, nRemotePort)
-
-        session
-    }
-
-    static Connection connectToMySql(String host = 'localhost', int port = 3306, String user = 'root',
-                                     String password = null) throws SQLException {
-        Properties info = new Properties()
-
-        if (user != null)
-            info.put('user', user)
-
-        if (password != null)
-            info.put('password', password)
-
-        Class.forName('com.mysql.jdbc.Driver')
-
-        def con = DriverManager.getConnection("jdbc:mysql://${host}:${port}", info, Holders.grailsApplication.class)
-        con.autoCommit = false
-        con
-    }
-
     def chartsEncryprionService
-    def consoleService
-
-    def data(String query, String connectionString, String appearance) {
-        try {
-            if (!query) {
-                render([error: true, text: 'Query is empty'] as JSON)
-                return
-            }
-
-            query = new String(query.decodeBase64())
-
-            List<String> queries = query.split(';')
-
-            connectionString = chartsEncryprionService.decrypt(connectionString)
-
-            if (!connectionString.contains('{')) {
-                render(text: [error: 'connection_string_wrong'] as JSON)
-                return
-            }
-
-            def json = JSON.parse(connectionString)
-
-            Session sshSession = null
-
-            String mysqlHostname = json.mysqlHostname ?: 'localhost'
-            Integer mysqlPort = json.mysqlPort ?: 3306
-
-            if (json.sshToggle) {
-                mysqlPort = 3369
-                mysqlHostname = 'localhost'
-
-                sshSession = doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
-                        json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
-            }
-
-            try {
-                Connection connection =
-                        connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
-
-                Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
-
-                if (queries.size() > 1) {
-                    queries.eachWithIndex { entry, i ->
-                        if (i != (queries.size() - 1))
-                            stmt.addBatch(entry)
-                    }
-
-                    stmt.executeBatch()
-                    stmt.close()
-
-                    // re-init statement
-                    stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)
-                }
-
-                //        if (!query.toLowerCase().contains('limit'))
-//            query += ' LIMIT 100'
-
-                ResultSet rs = stmt.executeQuery(queries.size() > 1 ? queries.last() : query)
-
-                def columns = null
-                def content = null
-                def override = null
-
-                if (appearance) {
-                    try {
-                        def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
-
-                        def result = consoleService.eval(new String(appearance.decodeBase64()), bindingValues)
-
-                        if (result instanceof Map) {
-                            content = result.content
-                            columns = result.columns
-                            override = result.override
-                        } else {
-                            content = result
-                        }
-                    }
-                    catch (Throwable t) {
-                        render(text: [error: t.localizedMessage] as JSON)
-                        return
-                    }
-                } else {
-                    content = parse(rs)
-                }
-
-                rs.last()
-
-                render(text: [content: content, columns: columns ?: getColumns(rs), override: override, count: rs.row] as JSON)
-
-                stmt.close()
-                connection.close()
-            }
-            finally {
-                sshSession?.disconnect()
-            }
-        } catch (e) {
-            render(text: [error: e.localizedMessage] as JSON)
-            return
-        }
-    }
+    def consoleChartsService
 
     def connect(String connectData) {
         if (!connectData) {
@@ -194,7 +60,7 @@ class ConsoleChartsController {
                         return
                     }
 
-                    sshSession = doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
+                    sshSession = consoleChartsService.doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
                             json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
                 }
 
@@ -213,8 +79,8 @@ class ConsoleChartsController {
                 }
 
                 try {
-                    Connection connection =
-                            connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
+                    Connection connection = consoleChartsService
+                            .connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
 
                     connection.close()
                     sshSession?.disconnect()
@@ -237,69 +103,60 @@ class ConsoleChartsController {
         } else {
             // maybe
         }
-
     }
 
-    static List parse(ResultSet rs) {
-        def content = []
-
-        while (rs.next()) {
-            def item = [:]
-            for (int i = 1; i <= rs.metaData.getColumnCount(); i++) {
-                def value = i == 1 ? rs.getString(i) : null
-
-                if (i > 1) {
-                    try {
-                        value = rs.getInt(i);
-                    } catch (e) {
-                        // ignore
-                    }
-                }
-
-                item[rs.metaData.getColumnName(i)] = value
+    def data(String query, String connectionString, String appearance) {
+        try {
+            if (!query) {
+                render([error: true, text: 'Query is empty'] as JSON)
+                return
             }
 
-            content.add item
-        }
+            // decode parameters
+            query = new String(query.decodeBase64())
+            connectionString = chartsEncryprionService.decrypt(connectionString)
+            appearance = new String(appearance.decodeBase64())
 
-        content
+            render(text: consoleChartsService.getData(query, connectionString, appearance, request) as JSON)
+        } catch (e) {
+            render(text: [error: e.localizedMessage] as JSON)
+        }
     }
 
-    static List toList(ResultSet rs) {
-        def content = []
+    def link() {
+        def json = request.JSON as JSON
+        String data = json.toString()
+        String encodedData = chartsEncryprionService.encrypt(data)
+        String link =
+                createLink(controller: 'consoleCharts', action: 'view', params: [q: encodedData], absolute: true)
 
-        while (rs.next()) {
-            def item = []
-            for (int i = 1; i <= rs.metaData.getColumnCount(); i++) {
-                def value = i == 1 ? rs.getString(i) : null
-
-                if (i > 1) {
-                    try {
-                        value = rs.getInt(i);
-                    } catch (e) {
-                        // ignore
-                    }
-                }
-
-                item.add value
-            }
-
-            content.add item
-        }
-
-        content
+        render(text: [link: link] as JSON)
     }
 
-    static List getColumns(ResultSet rs) {
-        def result = []
-
-        ResultSetMetaData metaData = rs.metaData
-
-        for (int i = 1; i <= metaData.getColumnCount(); i++) {
-            result.add metaData.getColumnName(i)
+    def view(String q) {
+        if (!q) {
+            render([error: true, text: 'Q is empty'] as JSON)
+            return
         }
 
-        result
+        String decoded = chartsEncryprionService.decrypt(q)
+
+        def json = JSON.parse(decoded)
+
+        String query = json.query
+        String connectionString = chartsEncryprionService.decrypt(json.connectionString)
+        String appearance = json.appearance
+
+        def data = consoleChartsService.getData(query, connectionString, appearance, request)
+
+        data.title = json.title
+        data.width = json.width
+        data.height = json.height
+        data.query = query
+        data.connectionString = connectionString
+        data.appearance = appearance
+
+        data
     }
 
 }

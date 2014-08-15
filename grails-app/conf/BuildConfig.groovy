@@ -19,6 +19,14 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = 'target/test-classes'
 grails.project.test.reports.dir = 'target/test-reports'
 
+forkConfig = [maxMemory: 1024, minMemory: 64, debug: false, maxPerm: 256]
+grails.project.fork = [
+        test   : forkConfig,
+        run    : forkConfig,
+        war    : forkConfig,
+        console: forkConfig
+]
+
 grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
     inherits('global') {
@@ -68,7 +76,7 @@ gwt {
     dependencies = [
             'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
             'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
-            'edu.stanford.protege:codemirror-gwt:1.0.0'
+            'edu.stanford.protege:codemirror-gwt:1.0.1-SNAPSHOT'
     ]
     if (Environment.isDevelopmentMode()) {
         draft.compile = true

@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
+import org.grails.plugin.console.charts.client.application.share.AbstractSharePresenter;
 import org.grails.plugin.console.charts.client.place.NameTokens;
 import org.grails.plugin.console.charts.client.place.ParameterTokens;
 import org.grails.plugin.console.charts.shared.events.ConnectedEvent;
@@ -69,19 +70,20 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
 
     PlaceManager placeManager;
 
-    String query;
-    String appearance;
-    String view;
+    private AbstractSharePresenter sharePresenter;
+
     JSONObject result;
 
     public AbstractApplicationPresenter(final EventBus eventBus,
                                         final MyView view,
                                         final MyProxy proxy,
                                         final RevealType slot,
-                                        final PlaceManager placeManager) {
+                                        final PlaceManager placeManager,
+                                        final AbstractSharePresenter sharePresenter) {
         super(eventBus, view, proxy, slot);
 
         this.placeManager = placeManager;
+        this.sharePresenter = sharePresenter;
 
         view.setUiHandlers(this);
     }
@@ -102,29 +104,34 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
         if (appearance != null)
             appearance = AppUtils.decodeBase64(URL.decodePathSegment(appearance));
 
-        if (query != null && !query.equals(this.query)) {
-            this.query = query;
+        if (query != null && !query.equals(AppUtils.QUERY)) {
+            AppUtils.QUERY = query;
             result = null;
         }
 
-        if (appearance != null && !appearance.equals(this.appearance)) {
-            this.appearance = appearance;
+        if (appearance != null && !appearance.equals(AppUtils.APPEARANCE)) {
+            AppUtils.APPEARANCE = appearance;
             result = null;
         }
 
-        if (view != null && !view.equals(this.view)) {
-            this.view = view;
+        if (view != null && !view.equals(AppUtils.VIEW)) {
+            AppUtils.VIEW = view;
         }
     }
 
     @Override
     public void onViewChanged(String view) {
         PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME)
-                .with(ParameterTokens.QUERY, AppUtils.encodeBase64(URL.encodePathSegment(query)))
+                .with(ParameterTokens.QUERY, AppUtils.encodeBase64(URL.encodePathSegment(AppUtils.QUERY)))
                 .with(ParameterTokens.CONNECTION_STRING, URL.encodePathSegment(AppUtils.CONNECTION_STRING))
                 .with(ParameterTokens.VIEW, view).build();
 
         placeManager.revealPlace(request);
+    }
+
+    @Override
+    public void onShareClicked() {
+        addToPopupSlot(sharePresenter);
     }
 
     @Override
@@ -140,7 +147,7 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
     @Override
     protected void onReset() {
         if (result == null) {
-            if (query != null) {
+            if (AppUtils.QUERY != null) {
                 if (AppUtils.CONNECTION_STRING == null) {
                     getView().error("Not connected to server");
 
@@ -151,8 +158,8 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
 
                 try {
                     RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, AppUtils.getDataPath() +
-                            "?query=" + URL.encodeQueryString(AppUtils.encodeBase64(query)) +
-                            "&appearance=" + URL.encodePathSegment(AppUtils.encodeBase64(appearance)) +
+                            "?query=" + URL.encodeQueryString(AppUtils.encodeBase64(AppUtils.QUERY)) +
+                            "&appearance=" + URL.encodePathSegment(AppUtils.encodeBase64(AppUtils.APPEARANCE)) +
                             "&connectionString=" + URL.encodePathSegment(AppUtils.CONNECTION_STRING));
 
                     rb.setCallback(new RequestCallback() {
@@ -166,7 +173,7 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                                 return;
                             }
 
-                            getView().view(view, result);
+                            getView().view(AppUtils.VIEW, result);
                         }
 
                         @Override
@@ -181,7 +188,7 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                 }
             }
         } else {
-            getView().view(view, result);
+            getView().view(AppUtils.VIEW, result);
         }
     }
 

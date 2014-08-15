@@ -24,4 +24,6 @@ public interface ApplicationUiHandlers extends UiHandlers {
 
     void onViewChanged(String view);
 
+    void onShareClicked();
+
 }

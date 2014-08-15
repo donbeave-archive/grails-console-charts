@@ -17,6 +17,7 @@
     <script type="text/javascript">
         var console_charts_connect_url = "${createLink(controller: 'consoleCharts', action: 'connect')}";
         var console_charts_data_url = "${createLink(controller: 'consoleCharts', action: 'data')}";
+        var console_charts_link_url = "${createLink(controller: 'consoleCharts', action: 'link')}";
     </script>
 </head>
 
