@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
 import grails.converters.JSON
 import grails.util.Holders
-import org.json.JSONException
+import org.codehaus.groovy.grails.web.json.JSONException
 
 import java.sql.*
 
