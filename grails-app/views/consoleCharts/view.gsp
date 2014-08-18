@@ -27,7 +27,7 @@
                         'bullet'               : 'round',
                         'bulletBorderThickness': 1,
                         'hideBulletsCount'     : 30,
-                        'title'                : "${override && override[col] ? override[col] : col}",
+                        'title'                : "${override && override[col.toString()] ? override[col.toString()] : col}",
                         'fillAlphas'           : 0
                 ])
             }
