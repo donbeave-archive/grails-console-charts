@@ -22,6 +22,7 @@
             if (i > 0) {
                 graphs.add([
                         'id'                   : "g${i}",
+                        "balloonText"          : "${columns.size > 2 ? '[[title]]: [[value]]' : '[[value]]'}",
                         'valueField'           : "${col}",
                         'valueAxis'            : "v${i}",
                         'bullet'               : 'round',

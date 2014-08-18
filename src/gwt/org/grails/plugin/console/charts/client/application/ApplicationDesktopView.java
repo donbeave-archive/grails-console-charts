@@ -159,6 +159,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
             graphs += (graphs.equals("") ? "" : ",") + "{\n" +
                     "\"id\": \"g" + i + "\",\n" +
+                    "\"balloonText\": \"" + (columns.size() > 2 ? "[[title]]: [[value]]" : "[[value]]") + "\",\n" +
                     "\"valueField\": " + col + ",\n" +
                     "\"valueAxis\": \"v" + i + "\",\n" +
                     "\"bullet\": \"round\",\n" +
