@@ -81,9 +81,9 @@ class ConsoleChartsService {
 
                 if (i > 1) {
                     try {
-                        value = rs.getInt(i);
+                        value = rs.getInt(i)
                     } catch (e) {
-                        // ignore
+                        value = rs.getString(i)
                     }
                 }
 
