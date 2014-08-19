@@ -40,13 +40,21 @@
                 'scrollbarHeight': 40
         ] : []
 
+        def cursor = columns && columns.size() > 5 ? [
+                'cursorAlpha'         : 0.1,
+                'cursorColor'         : '#000000',
+                'fullWidth'           : true,
+                'valueBalloonsEnabled': false,
+                'zoomable'            : true
+        ] : []
+
         def chartData = [
                 'type'          : 'serial',
                 'theme'         : 'none',
                 'pathToImages'  : 'http://www.amcharts.com/lib/3/images/',
                 'legend'        : [
                         'align'          : 'center',
-                        'equalWidths'    : false,
+                        'equalWidths'    : true,
                         'periodValueText': 'total: [[value.sum]]',
                         'valueAlign'     : 'left',
                         'valueText'      : '[[value]] ([[percents]]%)',
@@ -65,7 +73,7 @@
                 ],
                 'graphs'        : graphs,
                 'chartScrollbar': scrollbar,
-                'chartCursor'   : [],
+                'chartCursor'   : cursor,
                 'categoryField' : columns.get(0),
                 'categoryAxis'  : [
                         'parseDates'      : true,

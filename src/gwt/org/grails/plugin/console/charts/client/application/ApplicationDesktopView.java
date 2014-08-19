@@ -178,13 +178,22 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                         "  \"scrollbarHeight\": 40\n" +
                         "}," : "{},";
 
+        String cursor = (columns.size() > 5) ?
+                "{\n" +
+                        "  \"cursorAlpha\": 0.1,\n" +
+                        "  \"cursorColor\": \"#000000\",\n" +
+                        "  \"fullWidth\": true,\n" +
+                        "  \"valueBalloonsEnabled\": false,\n" +
+                        "  \"zoomable\": true\n" +
+                        "}," : "{},";
+
         String content = "AmCharts.makeChart(\"" + CHART_ID + "\", {" +
                 "\"type\": \"serial\",\n" +
                 "\"theme\": \"none\",\n" +
                 "\"pathToImages\": \"http://www.amcharts.com/lib/3/images/\",\n" +
                 "\"legend\": {\n" +
                 "  \"align\": \"center\",\n" +
-                "  \"equalWidths\": false,\n" +
+                "  \"equalWidths\": true,\n" +
                 "  \"periodValueText\": \"total: [[value.sum]]\",\n" +
                 "  \"valueAlign\": \"left\",\n" +
                 "  \"valueText\": \"[[value]] ([[percents]]%)\",\n" +
@@ -195,12 +204,12 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                 "\"valueAxes\": [" + axes + "],\n" +
                 "\"graphs\": [" + graphs + "],\n" +
                 "\"chartScrollbar\": " + scrollbar + "\n" +
-                "\"chartCursor\": {},\n" +
+                "\"chartCursor\": " + cursor + "\n" +
                 "\"categoryField\": " + columns.get(0) + ",\n" +
                 "\"categoryAxis\": {\n" +
-                "\"parseDates\": true,\n" +
-                "\"axisColor\": \"#DADADA\",\n" +
-                "\"minorGridEnabled\": true\n" +
+                "  \"parseDates\": true,\n" +
+                "  \"axisColor\": \"#DADADA\",\n" +
+                "  \"minorGridEnabled\": true\n" +
                 "}\n" +
                 "});";
 
