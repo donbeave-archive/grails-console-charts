@@ -62,7 +62,7 @@ class ConsoleChartsService {
                     }
                 }
 
-                item[rs.metaData.getColumnName(i)] = value
+                item[rs.metaData.getColumnLabel(i) ?: rs.metaData.getColumnName(i)] = value
             }
 
             content.add item
@@ -102,7 +102,7 @@ class ConsoleChartsService {
         ResultSetMetaData metaData = rs.metaData
 
         for (int i = 1; i <= metaData.getColumnCount(); i++) {
-            result.add metaData.getColumnName(i)
+            result.add metaData.getColumnLabel(i) ?: metaData.getColumnName(i)
         }
 
         result
