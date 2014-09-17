@@ -19,6 +19,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = 'target/test-classes'
 grails.project.test.reports.dir = 'target/test-reports'
 
+/*
 forkConfig = [maxMemory: 1024, minMemory: 64, debug: false, maxPerm: 256]
 grails.project.fork = [
         test   : forkConfig,
@@ -26,6 +27,7 @@ grails.project.fork = [
         war    : forkConfig,
         console: forkConfig
 ]
+*/
 
 grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
@@ -50,14 +52,14 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build(':tomcat:7.0.54',
+        build(':tomcat:7.0.55',
                 ':release:3.0.1',
-                ':rest-client-builder:1.0.3') {
+                ':rest-client-builder:2.0.3') {
             export = false
         }
         runtime ':console:1.4.4'
-        compile(':asset-pipeline:1.9.4',
-                ':hibernate4:4.3.5.4',
+        compile(':asset-pipeline:1.9.9',
+                ':hibernate4:4.3.5.5',
                 ':resources:1.2.8') {
             export = false
         }
