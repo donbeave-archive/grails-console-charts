@@ -26,7 +26,7 @@ public class AppUtils {
     }-*/;
 
     public static native String decodeBase64(final String base64) /*-{
-        return unescape(decodeURIComponent(window.atob(str)));
+        return unescape(decodeURIComponent(window.atob(base64)));
     }-*/;
 
     public static native String encodeBase64(final String input) /*-{
