@@ -34,7 +34,7 @@ class ConsoleChartsController {
 
     def connect(String connectData) {
         if (!connectData) {
-            render(text: [connected: false, error: 'empty_data'] as JSON)
+            render([connected: false, error: 'empty_data'] as JSON)
             return
         }
         if (connectData.contains('{')) {
@@ -51,12 +51,12 @@ class ConsoleChartsController {
                     mysqlHostname = 'localhost'
 
                     if (!json.sshHostname) {
-                        render(text: [connected: false, error: 'ssh_hostname_empty'] as JSON)
+                        render([connected: false, error: 'ssh_hostname_empty'] as JSON)
                         return
                     }
 
                     if (!json.sshUsername) {
-                        render(text: [connected: false, error: 'ssh_username_empty'] as JSON)
+                        render([connected: false, error: 'ssh_username_empty'] as JSON)
                         return
                     }
 
@@ -67,14 +67,14 @@ class ConsoleChartsController {
                 if (!json.mysqlHostname) {
                     sshSession?.disconnect()
 
-                    render(text: [connected: false, error: 'mysql_hostname_empty'] as JSON)
+                    render([connected: false, error: 'mysql_hostname_empty'] as JSON)
                     return
                 }
 
                 if (!json.mysqlUsername) {
                     sshSession?.disconnect()
 
-                    render(text: [connected: false, error: 'mysql_username_empty'] as JSON)
+                    render([connected: false, error: 'mysql_username_empty'] as JSON)
                     return
                 }
 
@@ -89,16 +89,16 @@ class ConsoleChartsController {
 
                     String status = "${json.sshToggle ? "${json.mysqlHostname}:${json.mysqlPort}" : "${mysqlHostname}:${mysqlPort}"}${json.sshToggle ? " through ${json.sshHostname}:${json.sshPort}" : ''}"
 
-                    render(text: [connected       : true,
-                                  connectionString: encodedString,
-                                  status          : "Connected to ${status}"] as JSON)
+                    render([connected       : true,
+                            connectionString: encodedString,
+                            status          : "Connected to ${status}"] as JSON)
                 } catch (IOException | SQLException e) {
                     sshSession?.disconnect()
 
-                    render(text: [connected: false, error: e.message, exception: e.class] as JSON)
+                    render([connected: false, error: e.message, exception: e.class] as JSON)
                 }
             } catch (ConverterException e) {
-                render(text: [connected: false, error: 'wrong_json'] as JSON)
+                render([connected: false, error: 'wrong_json'] as JSON)
             }
         } else {
             // maybe
@@ -117,9 +117,9 @@ class ConsoleChartsController {
             connectionString = chartsEncryprionService.decrypt(connectionString)
             appearance = new String(appearance.decodeBase64())
 
-            render(text: consoleChartsService.getData(query, connectionString, appearance, request) as JSON)
+            render(consoleChartsService.getData(query, connectionString, appearance, request) as JSON)
         } catch (e) {
-            render(text: [error: e.localizedMessage] as JSON)
+            render([error: e.localizedMessage] as JSON)
         }
     }
 
@@ -130,7 +130,7 @@ class ConsoleChartsController {
         String link =
                 createLink(controller: 'consoleCharts', action: 'view', params: [q: encodedData], absolute: true)
 
-        render(text: [link: link] as JSON)
+        render([link: link] as JSON)
     }
 
     def view(String q) {
