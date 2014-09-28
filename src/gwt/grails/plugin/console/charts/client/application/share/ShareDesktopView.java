@@ -16,6 +16,7 @@
 package grails.plugin.console.charts.client.application.share;
 
 import com.dianaui.universal.core.client.ui.*;
+import com.dianaui.universal.core.client.ui.base.HasTarget;
 import com.dianaui.universal.core.client.ui.html.Text;
 import com.dianaui.universal.gwtp.client.ModalViewWithUiHandlers;
 import com.google.gwt.core.client.GWT;
@@ -89,6 +90,7 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
             shareBlock.add(text);
         } else {
             Anchor anchor = new Anchor(link, link);
+            anchor.setTarget(HasTarget.BLANK);
             shareBlock.add(anchor);
         }
 
