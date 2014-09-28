@@ -73,7 +73,7 @@ public class AbstractSharePresenter extends PresenterWidget<AbstractSharePresent
     }
 
     @Override
-    public void onGetLinkClicked() {
+    public void onGetLinkClicked(String format) {
         ShareDetails details = getView().getEditorDriver().flush();
         details.setConnectionString(AppUtils.CONNECTION_STRING);
         details.setQuery(AppUtils.QUERY);
@@ -86,7 +86,7 @@ public class AbstractSharePresenter extends PresenterWidget<AbstractSharePresent
         String json = AutoBeanCodex.encode(bean).getPayload();
 
         try {
-            RequestBuilder rb = new RequestBuilder(RequestBuilder.POST, AppUtils.getLinkPath());
+            RequestBuilder rb = new RequestBuilder(RequestBuilder.POST, AppUtils.getLinkPath() + "?format=" + format);
 
             rb.sendRequest(json, new RequestCallback() {
                 @Override

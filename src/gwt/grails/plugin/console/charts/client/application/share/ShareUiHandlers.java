@@ -22,5 +22,6 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface ShareUiHandlers extends UiHandlers {
 
-    void onGetLinkClicked();
+    void onGetLinkClicked(String format);
+
 }

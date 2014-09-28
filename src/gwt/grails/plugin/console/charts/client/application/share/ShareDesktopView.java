@@ -16,6 +16,7 @@
 package grails.plugin.console.charts.client.application.share;
 
 import com.dianaui.universal.core.client.ui.*;
+import com.dianaui.universal.core.client.ui.html.Text;
 import com.dianaui.universal.gwtp.client.ModalViewWithUiHandlers;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -54,13 +55,21 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
     Collapse collapse;
 
     @UiField
-    Anchor link;
+    Alert shareBlock;
 
     @UiField
     Button getLinkButton;
 
     @UiField
     InlineCheckBox editable;
+
+    @UiField
+    @Ignore
+    RadioButton linkFormat;
+
+    @UiField
+    @Ignore
+    RadioButton iframeFormat;
 
     @Inject
     ShareDesktopView(Binder uiBinder, EventBus eventBus) {
@@ -73,8 +82,16 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
 
     @Override
     public void setLink(String link) {
-        this.link.setHref(link);
-        this.link.setText(link);
+        shareBlock.clear();
+
+        if (iframeFormat.isActive()) {
+            Text text = new Text("<iframe src=\"" + link + "\" width=\"" + width.getValue() + "\" height=\"" + height.getValue() + "\"></iframe>");
+            shareBlock.add(text);
+        } else {
+            Anchor anchor = new Anchor(link, link);
+            shareBlock.add(anchor);
+        }
+
         collapse.show();
     }
 
@@ -85,7 +102,7 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
 
     @UiHandler("getLinkButton")
     void onGetLinkButtonClicked(ClickEvent event) {
-        getUiHandlers().onGetLinkClicked();
+        getUiHandlers().onGetLinkClicked(iframeFormat.isActive() ? "iframe" : "link");
     }
 
 }

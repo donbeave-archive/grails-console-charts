@@ -23,6 +23,15 @@
                         </b:Column>
                     </b:FormGroup>
                     <b:FormGroup>
+                        <b:FormLabel for="share_width" addStyleNames="col-xs-2">Format</b:FormLabel>
+                        <b:Column size="XS_10">
+                            <b:ButtonGroup toggle="BUTTONS">
+                                <b:RadioButton active="true" ui:field="linkFormat">Link</b:RadioButton>
+                                <b:RadioButton ui:field="iframeFormat">IFrame</b:RadioButton>
+                            </b:ButtonGroup>
+                        </b:Column>
+                    </b:FormGroup>
+                    <b:FormGroup>
                         <b:Column size="LG_10" push="LG_2">
                             <b:InlineCheckBox text="Editable" b:id="editable" ui:field="editable"/>
                         </b:Column>
@@ -31,9 +40,7 @@
                 <b:Collapse toggle="false" ui:field="collapse">
                     <b:FieldSet>
                         <b:FormGroup>
-                            <b:Alert type="SUCCESS" b:id="shareBlock">
-                                <b:Anchor target="_blank" ui:field="link"/>
-                            </b:Alert>
+                            <b:Alert type="SUCCESS" b:id="shareBlock" ui:field="shareBlock"/>
                         </b:FormGroup>
                     </b:FieldSet>
                 </b:Collapse>
