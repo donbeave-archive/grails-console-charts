@@ -26,11 +26,11 @@ public class AppUtils {
     }-*/;
 
     public static native String decodeBase64(final String base64) /*-{
-        return $wnd.atob(base64);
+        return unescape(decodeURIComponent(window.atob(str)));
     }-*/;
 
     public static native String encodeBase64(final String input) /*-{
-        return $wnd.btoa(input);
+        return window.btoa(encodeURIComponent(escape(input)));
     }-*/;
 
 }
