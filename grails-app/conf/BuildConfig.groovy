@@ -44,7 +44,7 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         runtime 'com.jcraft:jsch:0.1.51'
-        runtime 'mysql:mysql-connector-java:5.1.31', {
+        runtime 'mysql:mysql-connector-java:5.1.33', {
             export = false
         }
 
@@ -57,7 +57,7 @@ grails.project.dependency.resolution = {
                 ':rest-client-builder:2.0.3') {
             export = false
         }
-        runtime ':console:1.4.4'
+        runtime ':console:1.5.0'
         compile(':asset-pipeline:1.9.9',
                 ':hibernate4:4.3.5.5',
                 ':resources:1.2.8') {
@@ -73,7 +73,7 @@ grails.project.dependency.resolution = {
 gwt {
     version = '2.6.1'
     gin.version = '2.1.2'
-    gwtp.version = '1.3'
+    gwtp.version = '1.3.1'
     guava.version = '17.0'
     dependencies = [
             'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
