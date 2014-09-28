@@ -170,7 +170,7 @@ class ConsoleChartsController {
         String query = json.query
         String appearance = json.appearance
         Boolean editable = json.editable
-        String editLink
+        String editLink = null
 
         if (editable || Holders.config.grails.plugin.console.charts.editable)
             editLink = linkGenerator.link(uri: '/console/charts', absolute: true) +
@@ -181,9 +181,7 @@ class ConsoleChartsController {
         try {
             data = consoleChartsService.getData(query, connectionString, appearance, request)
         } catch (e) {
-            return [error: true, exception: e, text: "Can't get data", q: q, decoded: decoded]
-        } finally {
-            data = data ?: [editLink: editLink]
+            return [error: true, exception: e, text: "Can't get data", q: q, decoded: decoded, editLink: editLink]
         }
 
         data.title = json.title
@@ -192,6 +190,7 @@ class ConsoleChartsController {
         data.query = query
         data.connectionString = connectionString
         data.appearance = appearance
+        data.editLink = editLink
 
         data
     }
