@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.6.1//EN"
+        "https://raw.githubusercontent.com/gwtproject/gwt/2.6.1/distro-source/core/src/gwt-module.dtd">
+<module rename-to="GrailsChartsConsole">
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithFormFactor"/>
+    <inherits name="com.google.gwt.json.JSON"/>
+    <inherits name="com.dianaui.universal.core.DianaUICoreCDN"/>
+    <inherits name="com.dianaui.universal.gwtp.DianaUniversalGWTP"/>
+    <inherits name="edu.stanford.bmir.gwtcodemirror.CodeMirrorNoResources"/>
+
+    <inherits name='com.google.web.bindery.autobean.AutoBean'/>
+    <inherits name='com.google.gwt.editor.Editor'/>
+
+    <extend-property name="user.agent" values="opera"/>
+
+    <add-linker name="xsiframe"/>
+    <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
+    <set-configuration-property name="devModeRedirectEnabled" value="true"/>
+
+    <!-- Form factor specific modules -->
+    <set-configuration-property name="gin.ginjector.module.desktop"
+                                value="grails.plugin.console.charts.client.gin.DesktopModule"/>
+    <set-configuration-property name="gin.ginjector.module.tablet"
+                                value="grails.plugin.console.charts.client.gin.DesktopModule"/>
+    <set-configuration-property name="gin.ginjector.module.mobile"
+                                value="grails.plugin.console.charts.client.gin.DesktopModule"/>
+
+    <!-- Shared modules -->
+    <extend-configuration-property name="gin.ginjector.modules"
+                                   value="grails.plugin.console.charts.client.gin.SharedModule"/>
+
+    <!-- Specify the paths for translatable code -->
+    <source path="shared"/>
+    <source path="client"/>
+</module>
