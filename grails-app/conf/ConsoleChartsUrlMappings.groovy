@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
 class ConsoleChartsUrlMappings {
     static mappings = {
         "/console/charts"(view: 'consoleCharts/index')
