@@ -59,6 +59,9 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
     @UiField
     Button getLinkButton;
 
+    @UiField
+    InlineCheckBox editable;
+
     @Inject
     ShareDesktopView(Binder uiBinder, EventBus eventBus) {
         super(eventBus);

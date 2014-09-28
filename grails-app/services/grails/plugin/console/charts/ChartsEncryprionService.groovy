@@ -20,6 +20,8 @@ import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.DESedeKeySpec
+import javax.script.ScriptEngine
+import javax.script.ScriptEngineManager
 import java.security.spec.KeySpec
 
 /**
@@ -32,6 +34,7 @@ class ChartsEncryprionService {
 
     Cipher cipher
     SecretKey key
+    ScriptEngine javaScriptEngine
 
     String encrypt(String unencryptedString) {
         cipher.init(Cipher.ENCRYPT_MODE, key)
@@ -51,6 +54,26 @@ class ChartsEncryprionService {
         new String(plainText, unicodeFormat)
     }
 
+    String decodeBase64(String uriComponent) {
+        String js = "unescape(decodeURIComponent('" + new String(uriComponent.decodeBase64()) + "'))"
+        javaScriptEngine.eval(js)
+    }
+
+    String encodeBase64(String uriComponent) {
+        String js = "encodeURIComponent(escape('" + uriComponent + "'))"
+        javaScriptEngine.eval(js).encodeAsBase64()
+    }
+
+    String encodeQueryString(String decodedURLComponent) {
+        String js = "encodeURIComponent('" + decodedURLComponent + "').replace(/%20/g, \"+\")"
+        javaScriptEngine.eval(js)
+    }
+
+    String encodePathSegment(String decodedURLComponent) {
+        String js = "encodeURIComponent('" + decodedURLComponent + "')"
+        javaScriptEngine.eval(js)
+    }
+
     @PostConstruct
     void init() {
         String myEncryptionKey = "ThisIsSecretEncryptionKey"
@@ -60,6 +83,9 @@ class ChartsEncryprionService {
 
         cipher = Cipher.getInstance(encryptionScheme)
         key = keyFactory.generateSecret(keySpec)
+
+        ScriptEngineManager factory = new ScriptEngineManager()
+        javaScriptEngine = factory.getEngineByName('JavaScript')
     }
 
 }

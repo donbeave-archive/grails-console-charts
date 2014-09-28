@@ -35,4 +35,8 @@ public interface ShareDetails extends Serializable {
 
     void setView(String view);
 
+    Boolean isEditable();
+
+    void setEditable(Boolean editable);
+
 }

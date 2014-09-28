@@ -22,6 +22,11 @@
                             <b:IntegerBox b:id="share_height" ui:field="height"/>
                         </b:Column>
                     </b:FormGroup>
+                    <b:FormGroup>
+                        <b:Column size="LG_10" push="LG_2">
+                            <b:InlineCheckBox text="Editable" b:id="editable" ui:field="editable"/>
+                        </b:Column>
+                    </b:FormGroup>
                 </b:FieldSet>
                 <b:Collapse toggle="false" ui:field="collapse">
                     <b:FieldSet>

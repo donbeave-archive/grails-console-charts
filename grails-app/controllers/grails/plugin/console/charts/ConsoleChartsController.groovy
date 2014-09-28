@@ -17,7 +17,10 @@ package grails.plugin.console.charts
 
 import com.jcraft.jsch.Session
 import grails.converters.JSON
+import grails.util.Holders
 import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.springframework.beans.factory.annotation.Autowired
 
 import java.sql.Connection
 import java.sql.SQLException
@@ -31,6 +34,9 @@ class ConsoleChartsController {
 
     def chartsEncryprionService
     def consoleChartsService
+
+    @Autowired
+    LinkGenerator linkGenerator
 
     def connect(String connectData) {
         if (!connectData) {
@@ -113,13 +119,13 @@ class ConsoleChartsController {
             }
 
             // decode parameters
-            query = new String(query.decodeBase64())
+            query = chartsEncryprionService.decodeBase64(query)
             connectionString = chartsEncryprionService.decrypt(connectionString)
-            appearance = new String(appearance.decodeBase64())
+            appearance = chartsEncryprionService.decodeBase64(appearance)
 
             render(consoleChartsService.getData(query, connectionString, appearance, request) as JSON)
         } catch (e) {
-            render([error: e.localizedMessage] as JSON)
+            render([error: true, text: e.message] as JSON)
         }
     }
 
@@ -135,19 +141,41 @@ class ConsoleChartsController {
 
     def view(String q) {
         if (!q) {
-            render([error: true, text: 'Q is empty'] as JSON)
-            return
+            return [error: true, text: 'Q is empty']
         }
 
-        String decoded = chartsEncryprionService.decrypt(q)
+        String decoded
+        def json
+        String connectionString
+        def data
 
-        def json = JSON.parse(decoded)
+        try {
+            decoded = chartsEncryprionService.decrypt(q)
+        } catch (e) {
+            return [error: true, exception: e, text: "Can't decode data", q: q]
+        }
+
+        try {
+            json = JSON.parse(decoded)
+        } catch (e) {
+            return [error: true, exception: e, text: "Can't parse JSON", q: q, decoded: decoded]
+        }
+
+        try {
+            connectionString = chartsEncryprionService.decrypt(json.connectionString)
+        } catch (e) {
+            return [error: true, exception: e, text: "Can't decode connection string", q: q]
+        }
 
         String query = json.query
-        String connectionString = chartsEncryprionService.decrypt(json.connectionString)
         String appearance = json.appearance
+        Boolean editable = json.editable
 
-        def data = consoleChartsService.getData(query, connectionString, appearance, request)
+        try {
+            data = consoleChartsService.getData(query, connectionString, appearance, request)
+        } catch (e) {
+            return [error: true, exception: e, text: "Can't get data", q: q, decoded: decoded]
+        }
 
         data.title = json.title
         data.width = json.width
@@ -155,6 +183,11 @@ class ConsoleChartsController {
         data.query = query
         data.connectionString = connectionString
         data.appearance = appearance
+        if (editable || Holders.config.grails.plugin.console.charts.editable)
+            data.editLink = linkGenerator.link(uri: '/console/charts', absolute: true) +
+                    "#home;connectionString=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(json.connectionString)).encodeAsURL()};" +
+                    "appearance=${appearance ? chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(appearance))).encodeAsURL() : ''};" +
+                    "query=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(query))).encodeAsURL()}"
 
         data
     }
