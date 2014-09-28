@@ -20,3 +20,10 @@
 eventCreatePluginArchiveStart = { stagingDir ->
     ant.delete(dir: "${stagingDir}/src/gwt")
 }
+
+eventAssetPrecompileStart = { assetConfig ->
+    if (!config.grails.assets.plugin.'console-charts'.excludes ||
+            config.grails.assets.plugin.'console-charts'.excludes.size() == 0) {
+        config.grails.assets.plugin.'console-charts'.excludes = ['GrailsChartsConsole/**']
+    }
+}
