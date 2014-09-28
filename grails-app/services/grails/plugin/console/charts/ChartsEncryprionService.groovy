@@ -55,22 +55,22 @@ class ChartsEncryprionService {
     }
 
     String decodeBase64(String uriComponent) {
-        String js = "unescape(decodeURIComponent('" + new String(uriComponent.decodeBase64()) + "'))"
+        String js = "unescape(decodeURIComponent('" + new String(uriComponent.decodeBase64()).encodeAsJavaScript() + "'))"
         javaScriptEngine.eval(js)
     }
 
     String encodeBase64(String uriComponent) {
-        String js = "encodeURIComponent(escape('" + uriComponent + "'))"
+        String js = "encodeURIComponent(escape('" + uriComponent.encodeAsJavaScript() + "'))"
         javaScriptEngine.eval(js).encodeAsBase64()
     }
 
     String encodeQueryString(String decodedURLComponent) {
-        String js = "encodeURIComponent('" + decodedURLComponent + "').replace(/%20/g, \"+\")"
+        String js = "encodeURIComponent('" + decodedURLComponent.encodeAsJavaScript() + "').replace(/%20/g, \"+\")"
         javaScriptEngine.eval(js)
     }
 
     String encodePathSegment(String decodedURLComponent) {
-        String js = "encodeURIComponent('" + decodedURLComponent + "')"
+        String js = "encodeURIComponent('" + decodedURLComponent.encodeAsJavaScript() + "')"
         javaScriptEngine.eval(js)
     }
 
