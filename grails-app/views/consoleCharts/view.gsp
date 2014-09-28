@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="col-md-11">
-                    <pre>${exception.message}</pre>
+                    <pre>${exception.message} ${exception.cause?.message}</pre>
                 </div>
             </div>
         </g:if>
