@@ -165,15 +165,21 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                     rb.setCallback(new RequestCallback() {
                         @Override
                         public void onResponseReceived(Request request, Response response) {
-                            JSONValue value = JSONParser.parseStrict(response.getText());
-                            result = value.isObject();
+                            try {
+                                JSONValue value = JSONParser.parseStrict(response.getText());
+                                result = value.isObject();
 
-                            if (result.get("error") != null) {
-                                getView().error(result);
-                                return;
+                                if (result.get("error") != null) {
+                                    getView().error(result);
+                                    return;
+                                }
+
+                                getView().view(AppUtils.VIEW, result);
+                            } catch (Exception exception) {
+                                getView().error("Can't parse data JSON: " + exception.getMessage());
+                            } finally {
+                                result = null;
                             }
-
-                            getView().view(AppUtils.VIEW, result);
                         }
 
                         @Override

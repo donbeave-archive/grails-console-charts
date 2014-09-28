@@ -101,7 +101,7 @@ class ConsoleChartsController {
                 } catch (IOException | SQLException e) {
                     sshSession?.disconnect()
 
-                    render([connected: false, error: e.message, exception: e.class] as JSON)
+                    render([connected: false, error: "${e.message ?: ''} ${e.cause?.message ?: ''}", exception: e.class.canonicalName] as JSON)
                 }
             } catch (ConverterException e) {
                 render([connected: false, error: 'wrong_json'] as JSON)
@@ -125,7 +125,7 @@ class ConsoleChartsController {
 
             render(consoleChartsService.getData(query, connectionString, appearance, request) as JSON)
         } catch (e) {
-            render([error: true, text: e.message] as JSON)
+            render([error: true, text: "${e.message ?: ''} ${e.cause?.message ?: ''}", exception: e.class.canonicalName] as JSON)
         }
     }
 

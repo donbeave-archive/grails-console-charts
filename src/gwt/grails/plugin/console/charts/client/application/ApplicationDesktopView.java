@@ -105,8 +105,10 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
     @Override
     public void error(JSONObject result) {
-        if (result.get("error") != null) {
-            error(result.get("error").isString().stringValue());
+        if (result.get("text") != null) {
+            error(result.get("exception").isString().stringValue() + ": " + result.get("text").isString().stringValue());
+        } else {
+            Window.alert("Unknown error!");
         }
     }
 
