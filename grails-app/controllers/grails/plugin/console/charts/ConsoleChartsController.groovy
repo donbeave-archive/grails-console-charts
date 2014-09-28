@@ -144,10 +144,10 @@ class ConsoleChartsController {
             return [error: true, text: 'Q is empty']
         }
 
-        String decoded
-        def json
-        String connectionString
-        def data
+        String decoded = null
+        def json = null
+        String connectionString = null
+        def data = null
 
         try {
             decoded = chartsEncryprionService.decrypt(q)
@@ -170,11 +170,20 @@ class ConsoleChartsController {
         String query = json.query
         String appearance = json.appearance
         Boolean editable = json.editable
+        String editLink
+
+        if (editable || Holders.config.grails.plugin.console.charts.editable)
+            editLink = linkGenerator.link(uri: '/console/charts', absolute: true) +
+                    "#home;connectionString=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(json.connectionString)).encodeAsURL()};" +
+                    "appearance=${appearance ? chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(appearance))).encodeAsURL() : ''};" +
+                    "query=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(query))).encodeAsURL()}"
 
         try {
             data = consoleChartsService.getData(query, connectionString, appearance, request)
         } catch (e) {
             return [error: true, exception: e, text: "Can't get data", q: q, decoded: decoded]
+        } finally {
+            data = data ?: [editLink: editLink]
         }
 
         data.title = json.title
@@ -183,11 +192,6 @@ class ConsoleChartsController {
         data.query = query
         data.connectionString = connectionString
         data.appearance = appearance
-        if (editable || Holders.config.grails.plugin.console.charts.editable)
-            data.editLink = linkGenerator.link(uri: '/console/charts', absolute: true) +
-                    "#home;connectionString=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(json.connectionString)).encodeAsURL()};" +
-                    "appearance=${appearance ? chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(appearance))).encodeAsURL() : ''};" +
-                    "query=${chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodePathSegment(chartsEncryprionService.encodeBase64(query))).encodeAsURL()}"
 
         data
     }

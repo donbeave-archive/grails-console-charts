@@ -48,6 +48,7 @@
     }
 
     #editLink {
+        z-index: 99999;
         position: fixed;
         bottom: 1em;
         right: 1em;
@@ -185,14 +186,14 @@
         <script type="text/javascript" charset="utf-8" id="chartInit">
             AmCharts.makeChart("chart", ${raw((chartData as JSON).toString(true))});
         </script>
-        <g:if test="${editLink}">
-            <div id="editLink">
-                <a href="${editLink}" target="_blank" class="btn btn-default btn-xs">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                </a>
-            </div>
-        </g:if>
     </div>
 </g:else>
+<g:if test="${editLink}">
+    <div id="editLink">
+        <a href="${editLink}" target="_blank" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-pencil"></span> Edit
+        </a>
+    </div>
+</g:if>
 </body>
 </html>
