@@ -27,7 +27,7 @@ class ConsoleChartsGrailsPlugin {
     def author = 'Alexey Zhokhov'
     def authorEmail = 'donbeave@gmail.com'
     def description = '''\
-A web-based console plugin for drawing [amChartsa|http://www.amcharts.com/] direct by data from SQL queries
+A web-based console plugin for drawing [amCharts|http://www.amcharts.com/] direct by data from SQL queries
 '''
 
     def documentation = 'http://grails.org/plugin/console-charts'
@@ -39,7 +39,7 @@ A web-based console plugin for drawing [amChartsa|http://www.amcharts.com/] dire
     ]
     def organization = [name: 'Polusharie', url: 'http://www.polusharie.com']
 
-    def issueManagement = [system: 'GITHUB',
+    def issueManagement = [system: 'GitHub',
                            url   : 'https://github.com/donbeave/grails-console-charts/issues']
     def scm = [url: 'https://github.com/donbeave/grails-console-charts']
 
