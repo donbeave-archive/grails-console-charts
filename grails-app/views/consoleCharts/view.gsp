@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="col-md-11">
-                    <pre>${exception.localizedMessage}</pre>
+                    <pre>${exception.message}</pre>
                 </div>
             </div>
         </g:if>
