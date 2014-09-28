@@ -176,7 +176,7 @@ class ConsoleChartsService {
             if (appearance) {
                 def bindingValues = [session: request.session, request: request, rs: rs, md: rs.metaData, base: this]
 
-                def result = consoleService.eval(appearance, bindingValues)
+                def result = consoleService.eval(appearance, true, bindingValues)
 
                 if (result instanceof Map) {
                     content = result.content
