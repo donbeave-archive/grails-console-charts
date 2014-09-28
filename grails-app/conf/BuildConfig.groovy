@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import grails.util.Environment
+import org.codehaus.groovy.grails.cli.parsing.CommandLineParser
 
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = 'target/test-classes'
@@ -72,7 +73,8 @@ grails.project.dependency.resolution = {
 
 gwt {
     version = '2.6.1'
-    gin.version = '2.1.2'
+    if (!CommandLineParser.currentCommandLine?.undeclaredOptions?.containsKey('no-gin'))
+        gin.version = '2.1.2'
     gwtp.version = '1.3.1'
     guava.version = '17.0'
     dependencies = [
