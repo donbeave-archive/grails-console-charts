@@ -50,8 +50,11 @@ html {
 }
 
 .CodeMirror {
-    height: 100%;
     font-size: 14px;
+}
+
+.CodeMirror-gutters {
+    min-height: 100%;
 }
 
 #code-wrapper {

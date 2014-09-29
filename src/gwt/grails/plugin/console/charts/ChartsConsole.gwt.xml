@@ -3,8 +3,10 @@
         "https://raw.githubusercontent.com/gwtproject/gwt/2.6.1/distro-source/core/src/gwt-module.dtd">
 <module rename-to="GrailsChartsConsole">
     <inherits name="com.google.gwt.user.User"/>
-    <inherits name="com.gwtplatform.mvp.MvpWithFormFactor"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
     <inherits name="com.google.gwt.json.JSON"/>
+    <inherits name="com.google.gwt.query.QueryMin"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithFormFactor"/>
     <inherits name="com.dianaui.universal.core.DianaUICoreCDN"/>
     <inherits name="com.dianaui.universal.gwtp.DianaUniversalGWTP"/>
     <inherits name="edu.stanford.bmir.gwtcodemirror.CodeMirrorNoResources"/>

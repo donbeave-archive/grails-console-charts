@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="${assetPath(src: 'console/charts/application.css')}"/>
     <link rel="stylesheet" href="${assetPath(src: 'console/charts/codemirror.css')}"/>
+    <link rel="stylesheet" href="${assetPath(src: 'console/charts/lesser-dark.css')}"/>
     <script type="text/javascript" src="${assetPath(src: 'console/charts/codemirror-compressed.js')}"></script>
 
     <script src="${resource(dir: 'gwt/GrailsChartsConsole', file: 'GrailsChartsConsole.nocache.js', plugin: 'console-charts')}?${new Date().time}"></script>

@@ -3,24 +3,31 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:b="urn:import:com.dianaui.universal.core.client.ui"
              xmlns:cm="urn:import:edu.stanford.bmir.gwtcodemirror.client">
-    <g:SplitLayoutPanel ui:field="container">
-        <g:north size="300">
-            <g:DockLayoutPanel>
+    <ui:style>
+        .container {
+            position: absolute !important;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </ui:style>
+    <g:SplitLayoutPanel addStyleNames="{style.container}" ui:field="container">
+        <g:north size="400">
+            <g:DockLayoutPanel ui:field="topPanel">
                 <g:north size="33">
                     <b:ButtonToolBar>
                         <b:Button fontAwesomeIcon="PLAY" ui:field="runButton"/>
                     </b:ButtonToolBar>
                 </g:north>
                 <g:center>
-                    <g:FlowPanel height="100%">
-                        <cm:GWTCodeMirror ui:field="queryEditor" height="100%"/>
-                    </g:FlowPanel>
+                    <cm:GWTCodeMirror ui:field="queryEditor"/>
                 </g:center>
             </g:DockLayoutPanel>
         </g:north>
         <g:center>
-            <g:FlowPanel height="100%">
-                <cm:GWTCodeMirror ui:field="appearanceEditor" height="100%"/>
+            <g:FlowPanel ui:field="appearanceContainer">
+                <cm:GWTCodeMirror ui:field="appearanceEditor"/>
             </g:FlowPanel>
         </g:center>
     </g:SplitLayoutPanel>
