@@ -80,7 +80,8 @@ gwt {
     dependencies = [
             'com.dianaui:dianaui-universal-core:0.1-SNAPSHOT',
             'com.dianaui:dianaui-universal-gwtp:0.1-SNAPSHOT',
-            'edu.stanford.protege:codemirror-gwt:1.0.1-SNAPSHOT'
+            'edu.stanford.protege:codemirror-gwt:1.0.1-SNAPSHOT',
+            'com.googlecode.gwtquery:gwtquery:1.4.2'
     ]
     if (Environment.isDevelopmentMode()) {
         draft.compile = true
