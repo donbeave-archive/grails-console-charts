@@ -127,6 +127,10 @@ class ConsoleChartsService {
     }
 
     def getData(String query, String connectionString, String appearance, request) {
+        query = query.trim()
+        if (appearance)
+            appearance = appearance.trim()
+
         List<String> queries = query.split(';')
 
         if (!connectionString.contains('{')) {
