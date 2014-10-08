@@ -15,6 +15,8 @@
  */
 package grails.plugin.console.charts
 
+import grails.util.Holders
+
 import javax.annotation.PostConstruct
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -76,7 +78,7 @@ class ChartsEncryprionService {
 
     @PostConstruct
     void init() {
-        String myEncryptionKey = "ThisIsSecretEncryptionKey"
+        String myEncryptionKey = Holders.config.grails.plugin.console.charts.encryption.key ?: 'ThisIsSecretEncryptionKey'
 
         KeySpec keySpec = new DESedeKeySpec(myEncryptionKey.getBytes(unicodeFormat))
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(encryptionScheme)
