@@ -16,7 +16,6 @@
 package grails.plugin.console.charts.client.application;
 
 import com.dianaui.universal.core.client.ui.Alert;
-import com.dianaui.universal.core.client.ui.AnchorListItem;
 import com.dianaui.universal.core.client.ui.Button;
 import com.dianaui.universal.core.client.ui.FontAwesomeIcon;
 import com.dianaui.universal.core.client.ui.constants.AlertType;
@@ -68,6 +67,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     @UiField
     Div rightContainer;
 
+    /*
     @UiField
     AnchorListItem lineChartButton;
 
@@ -79,6 +79,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
     @UiField
     AnchorListItem pieChartButton;
+    */
 
     @UiField
     Button shareButton;
@@ -220,6 +221,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         rightContainer.getElement().appendChild(script);
 
+        /*
         // update button
         lineChartButton.setFontAwesomeIcon(IconType.CIRCLE_O);
         barChartButton.setFontAwesomeIcon(IconType.CIRCLE_O);
@@ -240,6 +242,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
                 pieChartButton.setFontAwesomeIcon(IconType.CIRCLE);
                 break;
         }
+        */
     }
 
     @Override
@@ -258,6 +261,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
         }
     }
 
+    /*
     @UiHandler("lineChartButton")
     void onLineChartClicked(ClickEvent event) {
         getUiHandlers().onViewChanged("Line");
@@ -277,6 +281,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
     void onPieChartClicked(ClickEvent event) {
         getUiHandlers().onViewChanged("Pie");
     }
+    */
 
     @UiHandler("shareButton")
     void onShareClicked(ClickEvent event) {
