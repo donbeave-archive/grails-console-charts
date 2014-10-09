@@ -34,11 +34,12 @@ class ChartsEncryprionService {
     static final String unicodeFormat = 'UTF8'
     static final String encryptionScheme = 'DESede'
 
-    Cipher cipher
     SecretKey key
     ScriptEngine javaScriptEngine
 
     String encrypt(String unencryptedString) {
+        def cipher = getCipher()
+
         cipher.init(Cipher.ENCRYPT_MODE, key)
 
         byte[] plainText = unencryptedString.getBytes(unicodeFormat)
@@ -48,6 +49,8 @@ class ChartsEncryprionService {
     }
 
     String decrypt(String encryptedString) {
+        def cipher = getCipher()
+
         cipher.init(Cipher.DECRYPT_MODE, key)
 
         byte[] encryptedText = encryptedString.decodeBase64()
@@ -76,6 +79,10 @@ class ChartsEncryprionService {
         javaScriptEngine.eval(js)
     }
 
+    Cipher getCipher() {
+        Cipher.getInstance(encryptionScheme)
+    }
+
     @PostConstruct
     void init() {
         String myEncryptionKey = Holders.config.grails.plugin.console.charts.encryption.key ?: 'ThisIsSecretEncryptionKey'
@@ -83,7 +90,6 @@ class ChartsEncryprionService {
         KeySpec keySpec = new DESedeKeySpec(myEncryptionKey.getBytes(unicodeFormat))
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(encryptionScheme)
 
-        cipher = Cipher.getInstance(encryptionScheme)
         key = keyFactory.generateSecret(keySpec)
 
         ScriptEngineManager factory = new ScriptEngineManager()
