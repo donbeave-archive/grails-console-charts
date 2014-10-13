@@ -126,7 +126,7 @@ public class AbstractSharePresenter extends PresenterWidget<AbstractSharePresent
     private void initNewConnection() {
         ShareDetails details = shareFactory.details().as();
         details.setWidth(AppUtils.DEFAULT_WIDTH);
-        details.setHeight(AppUtils.DEFAULT_HEIGHT);
+        details.setHeight(AppUtils.CURRENT_HEIGHT);
 
         getView().getEditorDriver().edit(details);
     }

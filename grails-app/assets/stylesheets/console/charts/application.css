@@ -165,9 +165,8 @@ body[data-theme="default"] .modal-dialog .modal-footer {
 }
 
 #result {
-    height: 100%;
-    position: relative;
     background: white;
+    overflow: scroll;
 }
 
 #loading {

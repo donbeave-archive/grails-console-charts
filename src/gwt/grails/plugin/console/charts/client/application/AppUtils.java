@@ -37,7 +37,7 @@ public class AppUtils {
     public static final BeanFactory BEAN_FACTORY = GWT.create(BeanFactory.class);
 
     public static Integer DEFAULT_WIDTH = 900;
-    public static Integer DEFAULT_HEIGHT = 500;
+    public static Integer CURRENT_HEIGHT = 500;
 
     public static String CONNECTION_STRING = null;
     public static String QUERY;

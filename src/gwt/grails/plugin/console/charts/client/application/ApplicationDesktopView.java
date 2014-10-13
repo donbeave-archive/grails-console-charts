@@ -132,7 +132,6 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
         DivElement div = Document.get().createDivElement();
         div.setId(CHART_ID);
         div.getStyle().setWidth(AppUtils.DEFAULT_WIDTH, Style.Unit.PX);
-        div.getStyle().setHeight(AppUtils.DEFAULT_HEIGHT, Style.Unit.PX);
         div.getStyle().setProperty("margin", "0 auto");
 
         rightContainer.getElement().appendChild(div);
@@ -218,6 +217,10 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         ScriptElement script = Document.get().createScriptElement(content);
         script.setId(CHART_INIT_ID);
+
+        int height = ((columns.size() / 3) * 25) + 500;
+        div.getStyle().setHeight(height, Style.Unit.PX);
+        AppUtils.CURRENT_HEIGHT = height;
 
         rightContainer.getElement().appendChild(script);
 
