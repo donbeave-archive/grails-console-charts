@@ -143,7 +143,6 @@
                             'valueWidth'     : 100
                     ],
                     'dataDateFormat': 'YYYY-MM-DD HH:NN',
-                    'dataProvider'  : content,
                     'valueAxes'     : [
                             [
                                     'id'           : 'v1',
@@ -153,7 +152,6 @@
                                     'position'     : 'left'
                             ]
                     ],
-                    'graphs'        : graphs,
                     'chartScrollbar': scrollbar,
                     'chartCursor'   : cursor,
                     'categoryField' : columns.get(0),
@@ -184,14 +182,59 @@
             }
         %>
         <script type="text/javascript" charset="utf-8" id="chartInit">
-            AmCharts.makeChart("chart", ${raw((chartData as JSON).toString(true))});
+            var chart = null;
+            var graphs = ${raw((graphs as JSON).toString())};
+            var dataProvider = ${raw((content as JSON).toString())};
+            var chartData = ${raw((chartData as JSON).toString())};
+            chartData.graphs = graphs;
+            chartData.dataProvider = dataProvider;
+
+            function initChart() {
+                AmCharts.makeChart("chart", chartData);
+            }
+
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF'.split('');
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            function initColors() {
+                var colors = ['#FF6600', '#FCD202', '#B0DE09', '#0D8ECF', '#2A0CD0', '#CD0D74', '#CC0000', '#00CC00', '#0000CC', '#DDDDDD', '#999999', '#333333', '#990000'];
+
+                while (colors.length < graphs.length) {
+                    var color = getRandomColor();
+
+                    if (graphs.indexOf(color) == -1) {
+                        colors.push(color);
+                    }
+                }
+
+                for (var i = 0; i < graphs.length; i++) {
+                    graphs[i].lineColor = colors[i];
+                }
+            }
+
+            function hideAll() {
+                for (var i = 0; i < graphs.length; i++) {
+                    graphs[i].hidden = true;
+                }
+
+                initChart();
+            }
+
+            initColors();
+            initChart();
         </script>
     </div>
 </g:else>
 <div id="editLink">
     <div class="btn-group btn-group-xs">
-        <a href="${editLink}" target="_blank" class="btn btn-default">
-            <span class="glyphicon glyphicon-pencil"></span> Hide all
+        <a href="javascript:hideAll();" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-eye-close"></span> Hide all
         </a>
         <g:if test="${editLink}">
             <a href="${editLink}" target="_blank" class="btn btn-default">
