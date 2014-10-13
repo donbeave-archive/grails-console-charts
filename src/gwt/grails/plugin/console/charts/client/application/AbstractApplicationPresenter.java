@@ -20,6 +20,8 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
@@ -34,6 +36,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import grails.plugin.console.charts.client.application.share.AbstractSharePresenter;
 import grails.plugin.console.charts.client.place.NameTokens;
 import grails.plugin.console.charts.client.place.ParameterTokens;
+import grails.plugin.console.charts.shared.ConnectStatus;
 import grails.plugin.console.charts.shared.events.ConnectedEvent;
 import grails.plugin.console.charts.shared.events.ConnectedHandler;
 
@@ -154,47 +157,89 @@ public class AbstractApplicationPresenter extends Presenter<AbstractApplicationP
                     return;
                 }
 
-                getView().loading();
+                if (AppUtils.CONNECT_STATUS == null) {
+                    try {
+                        String url = AppUtils.getConnectPath() + "?data=" + URL.encodePathSegment(AppUtils.CONNECTION_STRING);
+                        RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
 
-                try {
-                    RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, AppUtils.getDataPath() +
-                            "?query=" + URL.encodeQueryString(AppUtils.encodeBase64(AppUtils.QUERY)) +
-                            "&appearance=" + URL.encodePathSegment(AppUtils.encodeBase64(AppUtils.APPEARANCE)) +
-                            "&connectionString=" + URL.encodePathSegment(AppUtils.CONNECTION_STRING));
+                        rb.setCallback(new RequestCallback() {
+                            @Override
+                            public void onResponseReceived(Request request, Response response) {
+                                ConnectStatus status = AutoBeanCodex.decode(AppUtils.BEAN_FACTORY, ConnectStatus.class,
+                                        response.getText()).as();
 
-                    rb.setCallback(new RequestCallback() {
-                        @Override
-                        public void onResponseReceived(Request request, Response response) {
-                            try {
-                                JSONValue value = JSONParser.parseStrict(response.getText());
-                                result = value.isObject();
+                                if (status.isConnected()) {
+                                    AppUtils.CONNECT_STATUS = status;
 
-                                if (result.get("error") != null) {
-                                    getView().error(result);
-                                    return;
+                                    ConnectedEvent.fire(AbstractApplicationPresenter.this, status.getConnectionString(),
+                                            status.getStatus());
+
+                                    loadData();
+                                } else {
+                                    String error =
+                                            (status.getException() != null ? " (" + status.getException() + ") " : "")
+                                                    + status.getError();
+                                    Window.alert("Error occurred: " + error);
                                 }
-
-                                getView().view(AppUtils.VIEW, result);
-                            } catch (Exception exception) {
-                                getView().error("Can't parse data JSON: " + exception.getMessage());
-                            } finally {
-                                result = null;
                             }
-                        }
 
-                        @Override
-                        public void onError(Request request, Throwable exception) {
-                            getView().error("Error occurred: " + exception.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onError(Request request, Throwable exception) {
+                                Window.alert("Error occurred: " + exception.getMessage());
+                            }
+                        });
 
-                    rb.send();
-                } catch (RequestException e) {
-                    getView().error("Error occurred: " + e.getMessage());
+                        rb.send();
+                    } catch (RequestException e) {
+                        Window.alert("Error occurred: " + e.getMessage());
+                    }
+                } else {
+                    loadData();
                 }
             }
         } else {
             getView().view(AppUtils.VIEW, result);
+        }
+    }
+
+    private void loadData() {
+        getView().loading();
+
+        try {
+            RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, AppUtils.getDataPath() +
+                    "?query=" + URL.encodeQueryString(AppUtils.encodeBase64(AppUtils.QUERY)) +
+                    "&appearance=" + URL.encodePathSegment(AppUtils.encodeBase64(AppUtils.APPEARANCE)) +
+                    "&connectionString=" + URL.encodePathSegment(AppUtils.CONNECTION_STRING));
+
+            rb.setCallback(new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    try {
+                        JSONValue value = JSONParser.parseStrict(response.getText());
+                        result = value.isObject();
+
+                        if (result.get("error") != null) {
+                            getView().error(result);
+                            return;
+                        }
+
+                        getView().view(AppUtils.VIEW, result);
+                    } catch (Exception exception) {
+                        getView().error("Can't parse data JSON: " + exception.getMessage());
+                    } finally {
+                        result = null;
+                    }
+                }
+
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    getView().error("Error occurred: " + exception.getMessage());
+                }
+            });
+
+            rb.send();
+        } catch (RequestException e) {
+            getView().error("Error occurred: " + e.getMessage());
         }
     }
 

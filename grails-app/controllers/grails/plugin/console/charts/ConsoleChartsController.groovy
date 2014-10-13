@@ -38,76 +38,84 @@ class ConsoleChartsController {
     @Autowired
     LinkGenerator linkGenerator
 
-    def connect(String connectData) {
-        if (!connectData) {
+    def connect(String data) {
+        if (!data) {
             render([connected: false, error: 'empty_data'] as JSON)
             return
         }
-        if (connectData.contains('{')) {
+        def json = null
+
+        if (!data.contains('{')) {
             try {
-                def json = JSON.parse(connectData)
-
-                String mysqlHostname = json.mysqlHostname ?: 'localhost'
-                Integer mysqlPort = json.mysqlPort ?: 3306
-
-                Session sshSession = null
-
-                if (json.sshToggle) {
-                    mysqlPort = 3368
-                    mysqlHostname = 'localhost'
-
-                    if (!json.sshHostname) {
-                        render([connected: false, error: 'ssh_hostname_empty'] as JSON)
-                        return
-                    }
-
-                    if (!json.sshUsername) {
-                        render([connected: false, error: 'ssh_username_empty'] as JSON)
-                        return
-                    }
-
-                    sshSession = consoleChartsService.doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
-                            json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
-                }
-
-                if (!json.mysqlHostname) {
-                    sshSession?.disconnect()
-
-                    render([connected: false, error: 'mysql_hostname_empty'] as JSON)
-                    return
-                }
-
-                if (!json.mysqlUsername) {
-                    sshSession?.disconnect()
-
-                    render([connected: false, error: 'mysql_username_empty'] as JSON)
-                    return
-                }
-
-                try {
-                    Connection connection = consoleChartsService
-                            .connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
-
-                    connection.close()
-                    sshSession?.disconnect()
-
-                    String encodedString = chartsEncryprionService.encrypt(json.toString())
-
-                    String status = "${json.sshToggle ? "${json.mysqlHostname}:${json.mysqlPort}" : "${mysqlHostname}:${mysqlPort}"}${json.sshToggle ? " through ${json.sshHostname}:${json.sshPort}" : ''}"
-
-                    render([connected       : true,
-                            connectionString: encodedString,
-                            status          : "Connected to ${status}"] as JSON)
-                } catch (IOException | SQLException e) {
-                    sshSession?.disconnect()
-
-                    render([connected: false, error: "${e.message ?: ''} ${e.cause?.message ?: ''}", exception: e.class.canonicalName] as JSON)
-                }
-            } catch (ConverterException e) {
-                render([connected: false, error: 'wrong_json'] as JSON)
+                data = chartsEncryprionService.decrypt(data)
+            } catch (e) {
+                render([connected: false, error: 'wrong_connection_string'] as JSON)
+                return
             }
-        } else {
-            // maybe
+        }
+
+        try {
+            json = JSON.parse(data)
+        } catch (ConverterException e) {
+            render([connected: false, error: 'wrong_json'] as JSON)
+            return
+        }
+
+        String mysqlHostname = json.mysqlHostname ?: 'localhost'
+        Integer mysqlPort = json.mysqlPort ?: 3306
+
+        Session sshSession = null
+
+        if (json.sshToggle) {
+            mysqlPort = 3368
+            mysqlHostname = 'localhost'
+
+            if (!json.sshHostname) {
+                render([connected: false, error: 'ssh_hostname_empty'] as JSON)
+                return
+            }
+
+            if (!json.sshUsername) {
+                render([connected: false, error: 'ssh_username_empty'] as JSON)
+                return
+            }
+
+            sshSession = consoleChartsService.doSshTunnel(json.sshHostname, json.sshPort ?: 22, json.sshUsername,
+                    json.sshPassword, json.mysqlHostname, mysqlPort, json.mysqlPort ?: 3306)
+        }
+
+        if (!json.mysqlHostname) {
+            sshSession?.disconnect()
+
+            render([connected: false, error: 'mysql_hostname_empty'] as JSON)
+            return
+        }
+
+        if (!json.mysqlUsername) {
+            sshSession?.disconnect()
+
+            render([connected: false, error: 'mysql_username_empty'] as JSON)
+            return
+        }
+
+        try {
+            Connection connection = consoleChartsService
+                    .connectToMySql(mysqlHostname, mysqlPort, json.mysqlUsername, json.mysqlPassword)
+
+            connection.close()
+            sshSession?.disconnect()
+
+            String encodedString = chartsEncryprionService.encrypt(json.toString())
+
+            String status = "${json.sshToggle ? "${json.mysqlHostname}:${json.mysqlPort}" : "${mysqlHostname}:${mysqlPort}"}${json.sshToggle ? " through ${json.sshHostname}:${json.sshPort}" : ''}"
+
+            render([connected       : true,
+                    connectionString: encodedString,
+                    status          : "Connected to ${status}"] as JSON)
+        } catch (IOException | SQLException e) {
+            sshSession?.disconnect()
+
+            render([connected: false, error: "${e.message ?: ''} ${e.cause?.message ?: ''}", exception: e.class.canonicalName] as JSON)
         }
     }
 

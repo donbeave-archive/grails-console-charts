@@ -188,12 +188,17 @@
         </script>
     </div>
 </g:else>
-<g:if test="${editLink}">
-    <div id="editLink">
-        <a href="${editLink}" target="_blank" class="btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-pencil"></span> Edit
+<div id="editLink">
+    <div class="btn-group btn-group-xs">
+        <a href="${editLink}" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span> Hide all
         </a>
+        <g:if test="${editLink}">
+            <a href="${editLink}" target="_blank" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span> Edit
+            </a>
+        </g:if>
     </div>
-</g:if>
+</div>
 </body>
 </html>

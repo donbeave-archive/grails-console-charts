@@ -20,38 +20,16 @@ import java.io.Serializable;
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
-public interface ShareDetails extends Serializable {
+public interface ConnectStatus extends Serializable {
 
-    String getTitle();
-
-    void setTitle(String title);
-
-    Integer getWidth();
-
-    void setWidth(Integer width);
-
-    Integer getHeight();
-
-    void setHeight(Integer height);
+    boolean isConnected();
 
     String getConnectionString();
 
-    void setConnectionString(String connectionString);
+    String getStatus();
 
-    String getQuery();
+    String getError();
 
-    void setQuery(String query);
-
-    String getAppearance();
-
-    void setAppearance(String appearance);
-
-    String getView();
-
-    void setView(String view);
-
-    Boolean isEditable();
-
-    void setEditable(Boolean editable);
+    String getException();
 
 }
