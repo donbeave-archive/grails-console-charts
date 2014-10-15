@@ -30,8 +30,8 @@
                                             </b:DropDownMenu>
                                         </b:ButtonGroup>
                                         -->
-                                        <b:Button pull="RIGHT" text="Share" fontAwesomeIcon="SHARE_SQUARE_O"
-                                                  ui:field="shareButton"/>
+                                        <b:Button enabled="false" pull="RIGHT" text="Share"
+                                                  fontAwesomeIcon="SHARE_SQUARE_O" ui:field="shareButton"/>
                                     </b:ButtonToolBar>
                                 </g:north>
                                 <g:center>

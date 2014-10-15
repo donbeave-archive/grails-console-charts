@@ -224,7 +224,9 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
 
         rightContainer.getElement().appendChild(script);
 
-        /*
+        shareButton.setEnabled(true);
+
+        /* TODO
         // update button
         lineChartButton.setFontAwesomeIcon(IconType.CIRCLE_O);
         barChartButton.setFontAwesomeIcon(IconType.CIRCLE_O);
@@ -264,7 +266,7 @@ public class ApplicationDesktopView extends ViewWithUiHandlers<ApplicationUiHand
         }
     }
 
-    /*
+    /* TODO
     @UiHandler("lineChartButton")
     void onLineChartClicked(ClickEvent event) {
         getUiHandlers().onViewChanged("Line");

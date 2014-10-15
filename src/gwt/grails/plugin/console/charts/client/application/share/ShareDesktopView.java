@@ -85,7 +85,7 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
     public void setLink(String link) {
         shareBlock.clear();
 
-        if (iframeFormat.isActive()) {
+        if (iframeFormat.getValue()) {
             Text text = new Text("<iframe src=\"" + link + "\" width=\"" + width.getValue() + "\" height=\"" + height.getValue() + "\"></iframe>");
             shareBlock.add(text);
         } else {
@@ -104,7 +104,7 @@ public class ShareDesktopView extends ModalViewWithUiHandlers<ShareUiHandlers> i
 
     @UiHandler("getLinkButton")
     void onGetLinkButtonClicked(ClickEvent event) {
-        getUiHandlers().onGetLinkClicked(iframeFormat.isActive() ? "iframe" : "link");
+        getUiHandlers().onGetLinkClicked(iframeFormat.getValue() ? "iframe" : "link");
     }
 
 }

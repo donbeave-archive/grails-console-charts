@@ -17,6 +17,7 @@ package grails.plugin.console.charts.client.application.editor;
 
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.TakesValue;
+import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -55,6 +56,10 @@ public class AbstractEditorPresenter extends PresenterWidget<AbstractEditorPrese
 
     @Override
     public void run() {
+        if (AppUtils.CONNECT_STATUS == null) {
+            Window.alert("You are not connected to the server");
+            return;
+        }
         String query = getView().getQueryEditor().getValue();
         if (query != null && !query.equals("")) {
             PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME)

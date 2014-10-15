@@ -26,8 +26,8 @@
                         <b:FormLabel for="share_width" addStyleNames="col-xs-2">Format</b:FormLabel>
                         <b:Column size="XS_10">
                             <b:ButtonGroup toggle="BUTTONS">
-                                <b:RadioButton active="true" ui:field="linkFormat">Link</b:RadioButton>
-                                <b:RadioButton ui:field="iframeFormat">IFrame</b:RadioButton>
+                                <b:RadioButton name="link" value="true" ui:field="linkFormat">Link</b:RadioButton>
+                                <b:RadioButton name="iframe" ui:field="iframeFormat">IFrame</b:RadioButton>
                             </b:ButtonGroup>
                         </b:Column>
                     </b:FormGroup>
