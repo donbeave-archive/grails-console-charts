@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
         mavenLocal()
         grailsCentral()
         mavenCentral()
+        mavenRepo 'https://oss.sonatype.org/content/repositories/snapshots/'
         mavenRepo 'https://raw.github.com/donbeave/mavenrepo/master/'
     }
     dependencies {
