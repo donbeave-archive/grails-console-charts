@@ -24,6 +24,8 @@ eventCreatePluginArchiveStart = { stagingDir ->
 eventAssetPrecompileStart = { assetConfig ->
     if (!config.grails.assets.plugin.'console-charts'.excludes ||
             config.grails.assets.plugin.'console-charts'.excludes.size() == 0) {
-        config.grails.assets.plugin.'console-charts'.excludes = ['GrailsChartsConsole/**']
+        config.grails.assets.plugin.'console-charts'.excludes = ['gwt/GrailsChartsConsole/codemirror/**',
+                                                                 'gwt/GrailsChartsConsole/.junit_symbolMaps/**',
+                                                                 'gwt/WEB-INF/deploy/GrailsChartsConsole/**']
     }
 }
