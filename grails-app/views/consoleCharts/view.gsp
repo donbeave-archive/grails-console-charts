@@ -240,19 +240,23 @@
     </div>
 </g:else>
 <div id="editLink">
-    <div class="btn-group btn-group-xs">
-        <a href="javascript:hideAll();" target="_blank" class="btn btn-default">
-            <span class="glyphicon glyphicon-eye-close"></span> Hide all
-        </a>
-        <a href="javascript:showAll();" target="_blank" class="btn btn-default">
-            <span class="glyphicon glyphicon-eye-open"></span> Show all
-        </a>
+    <div class="btn-group">
+        <button href="javascript:hideAll();" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top"
+                title="Hide all">
+            <span class="glyphicon glyphicon-eye-close"></span>
+        </button>
+        <button href="javascript:showAll();" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top"
+                title="Show all">
+            <span class="glyphicon glyphicon-eye-open"></span>
+        </button>
         <g:if test="${editLink}">
-            <a href="${editLink}" target="_blank" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil"></span> Edit
+            <a href="${editLink}" target="_blank" class="btn btn-default btn-xs" data-toggle="tooltip"
+               data-placement="top" title="Edit">
+                <span class="glyphicon glyphicon-pencil"></span>
             </a>
         </g:if>
     </div>
 </div>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>
