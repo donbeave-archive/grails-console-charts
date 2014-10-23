@@ -241,18 +241,18 @@
 </g:else>
 <div id="editLink">
     <div class="btn-group">
-        <button onclick="hideAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
+        <button type="button" id="hideAllBtn" onclick="hideAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
                 data-placement="top"
                 title="Hide all">
             <span class="glyphicon glyphicon-eye-close"></span>
         </button>
-        <button onclick="showAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
+        <button type="button" id="showAllBtn" onclick="showAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
                 data-placement="top"
                 title="Show all">
             <span class="glyphicon glyphicon-eye-open"></span>
         </button>
         <g:if test="${editLink}">
-            <a href="${editLink}" target="_blank" class="btn btn-default btn-xs" data-toggle="tooltip"
+            <a href="${editLink}" id="editBtn" target="_blank" class="btn btn-default btn-xs" data-toggle="tooltip"
                data-placement="top" title="Edit">
                 <span class="glyphicon glyphicon-pencil"></span>
             </a>
@@ -261,5 +261,10 @@
 </div>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('#hideAllBtn').tooltip({container: 'body'});
+    $('#showAllBtn').tooltip({container: 'body'});
+    $('#editBtn').tooltip({container: 'body'});
+</script>
 </body>
 </html>
