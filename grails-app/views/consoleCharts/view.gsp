@@ -226,6 +226,14 @@
                 initChart();
             }
 
+            function showAll() {
+                for (var i = 0; i < graphs.length; i++) {
+                    graphs[i].hidden = false;
+                }
+
+                initChart();
+            }
+
             initColors();
             initChart();
         </script>
@@ -235,6 +243,9 @@
     <div class="btn-group btn-group-xs">
         <a href="javascript:hideAll();" target="_blank" class="btn btn-default">
             <span class="glyphicon glyphicon-eye-close"></span> Hide all
+        </a>
+        <a href="javascript:showAll();" target="_blank" class="btn btn-default">
+            <span class="glyphicon glyphicon-eye-open"></span> Show all
         </a>
         <g:if test="${editLink}">
             <a href="${editLink}" target="_blank" class="btn btn-default">
