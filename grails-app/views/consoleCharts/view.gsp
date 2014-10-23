@@ -241,11 +241,13 @@
 </g:else>
 <div id="editLink">
     <div class="btn-group">
-        <button href="javascript:hideAll();" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top"
+        <button onclick="hideAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
+                data-placement="top"
                 title="Hide all">
             <span class="glyphicon glyphicon-eye-close"></span>
         </button>
-        <button href="javascript:showAll();" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top"
+        <button onclick="showAll();" class="btn btn-default btn-xs" data-toggle="tooltip"
+                data-placement="top"
                 title="Show all">
             <span class="glyphicon glyphicon-eye-open"></span>
         </button>
@@ -257,6 +259,7 @@
         </g:if>
     </div>
 </div>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>
