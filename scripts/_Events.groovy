@@ -19,6 +19,14 @@
  */
 eventCreatePluginArchiveStart = { stagingDir ->
     ant.delete(dir: "${stagingDir}/src/gwt")
+    ant.delete(dir: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/codemirror")
+    ant.delete(dir: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/.junit_symbolMaps")
+    ant.delete(dir: "${stagingDir}/web-app/js/gwt/WEB-INF/deploy/GrailsChartsConsole")
+    ant.delete(file: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/GrailsChartsConsole.devmode.js")
+    ant.delete(file: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/compilation-mappings.txt")
+    ant.delete(file: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/junit.html")
+    ant.delete(file: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/junit-standards.html")
+    ant.delete(file: "${stagingDir}/web-app/js/gwt/GrailsChartsConsole/manchestersyntax.css")
 }
 
 eventAssetPrecompileStart = { assetConfig ->
